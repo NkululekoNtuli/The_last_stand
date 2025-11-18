@@ -41,7 +41,7 @@ public class GameController {
 
         String skillToExecute = data.get("skill").toString();
         System.out.println("the skill is :" + skillToExecute);
-        String bossAction = gameService.executeSkill(skillToExecute);
+//        String bossAction = gameService.executeSkill(skillToExecute);
 //        Map<String, Object> playerState = ;
         Map<String, Object> bossState = new HashMap<>();
         return new HashMap<>();

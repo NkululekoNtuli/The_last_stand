@@ -22,9 +22,11 @@ public class GameService {
 
             if (payersTurn) {
              // execute players move
+                executeSkill(boss, "");
              payersTurn = false;
             }else {
                 //execute boss move
+                executeSkill(boss, "");
             }
         }
     }
@@ -42,7 +44,7 @@ public class GameService {
         return new Boss();
     }
 
-    public String executeSkill(String skill){
+    public static String executeSkill(BaseCharacter target, String skill){
         return "boss action";
     }
 
