@@ -1,55 +1,23 @@
 package org.agentofcode.the_last_stand_backend.model;
 
-import jakarta.persistence.*;
+import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
-import java.util.Map;
+@Component
+public interface Character {
 
-public class Character {
-
-    private int health = 200;
-    private int level = 0;
-    private int magicPower = 100 ;
-    private String name;
-
-    private HashMap<String, Integer> skills = new HashMap<>(Map.of(
-            "plasma beam", 10,
-            "atomic blast",20,
-            "healing", 30,
-            "bleed", 2
-    ));
+    int health = 0;
+    int level = 0;
+    int magicPower = 100 ;
+    String name = "name";
 
 
-    private String passiveSkill;
-    private String primarySkill;
-    private String secondarySkill;
-    private String ultimateSkill;
+    public int getHealth();
 
-    public Character(){}
-    public Character(String name, String[] chosenSkills){
-        this.name = name;
-        passiveSkill = chosenSkills[0];
-        primarySkill = chosenSkills[1];
-        secondarySkill = chosenSkills[2];
-        ultimateSkill = chosenSkills[3];
-    }
+    public int getLevel();
 
-    public int getHealth() {return health;
-    }
+    public int getMagicPower();
 
-    public int getLevel() {
-        return level;
-    }
+    public String getName();
 
-    public int getMagicPower() {
-        return magicPower;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String[] getSkills() {
-        return new String[] {passiveSkill, primarySkill, secondarySkill, ultimateSkill};
-    }
+    public String[] getSkills();
 }
