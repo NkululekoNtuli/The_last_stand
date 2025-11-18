@@ -14,17 +14,9 @@ public class GameService {
     private static Player player;
     private static Boss boss;
 
-//    private Character character;
-
-    private HashMap<String, Integer> skills = new HashMap<>(Map.of(
-            "plasma beam", 10,
-            "atomic blast",20,
-            "healing", 30,
-            "bleed", 2
-    ));
-
     public static void main(String[] args) {
         boolean payersTurn = true;
+
 
         while (player.getHealth() > 0 &&  boss.getHealth() > 0){
 
@@ -46,6 +38,9 @@ public class GameService {
         return "";
     }
 
+    public Boss creatBoss(Player player){
+        return new Boss();
+    }
 
     public String executeSkill(String skill){
         return "boss action";

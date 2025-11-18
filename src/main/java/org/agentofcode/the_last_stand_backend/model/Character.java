@@ -2,6 +2,7 @@ package org.agentofcode.the_last_stand_backend.model;
 
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,8 +11,8 @@ public interface Character {
 
     int health = 0;
     int level = 0;
-    int magicPower = 100 ;
-    String name = "name";
+    int magicPower = 0 ;
+    String name = "";
 
     Map<String, Object> Skills = new HashMap<>(Map.ofEntries(
             Map.entry("Atomic Blast", 22),             // High AoE burst
@@ -36,15 +37,23 @@ public interface Character {
             Map.entry("Void Rend", 26)                 // Late-game high magic burst
     ));
 
-    public int getHealth();
+    int getHealth();
 
-    public int getLevel();
+    int getLevel();
 
-    public int getMagicPower();
+    int getMagicPower();
 
-    public String getName();
+    String getName();
 
-    public String[] getSkills();
+    ArrayList<String> getSkills();
+
+    void decreaseHealth(int damage);
+
+    void decreaseMagicPower(int magicPower);
+
+    void increaseHealth(int health);
+
+    void increaseMagicPower(int magicPower);
 
     public Map<String, Object> getCharacterInfo();
 }

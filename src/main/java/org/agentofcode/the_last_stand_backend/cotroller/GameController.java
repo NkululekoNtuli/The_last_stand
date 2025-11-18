@@ -6,6 +6,7 @@ import org.agentofcode.the_last_stand_backend.service.GameService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,18 +24,16 @@ public class GameController {
         String name = data.get("name").toString();
         System.out.println(data.get("skills").getClass());
         ArrayList<String> skills = (ArrayList<String>) data.get("skills");
-
-        Player playerCharacter = new Player(name, skills.toArray(new String[0]));
-        Boss Boss = new Boss();
-
-
-        return new HashMap<>(Map.of(
-                "name", playerCharacter.getName(),
-                "hp", playerCharacter.getHealth(),
-                "mp", playerCharacter.getMagicPower(),
-                "level", playerCharacter.getLevel(),
-                "skills", playerCharacter.getSkills()
-        ));
+        Player playerCharacter = new Player(name, skills, 100, 100, 50);
+        System.out.println("player info: "+ playerCharacter.getCharacterInfo());
+//        return new HashMap<>(Map.of(
+//                "name", playerCharacter.getName(),
+//                "hp", playerCharacter.getHealth(),
+//                "mp", playerCharacter.getMagicPower(),
+//                "level", playerCharacter.getLevel(),
+//                "skills", playerCharacter.getSkills()
+//        ));
+        return playerCharacter.getCharacterInfo();
     }
 
     @RequestMapping(value = "the-last-stand/game", method = RequestMethod.POST)

@@ -2,41 +2,33 @@ package org.agentofcode.the_last_stand_backend.model;
 
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 
 @Component
-public class Boss implements Character {
-    private int health = 200;
-    private int level = 0;
-    private int magicPower = 100 ;
+public class Boss extends BaseCharacter {
     private String name;
-
+    private int health;
+    private int level;
+    private int magicPower;
+    private ArrayList<String> skills;
+    private HashMap<String, Object> skillsDMG = new HashMap<>();
 
     public Boss(){}
 
-    @Override
-    public int getHealth() {
-        return 0;
+    public Boss(String name, ArrayList<String> skills, int health, int level, int magicPower) {
+        this.name = name;
+        this.health = health;
+        this.level = level;
+        this.magicPower = magicPower;
+        this.skills = skills;
+        for (String skill : skills) skillsDMG.put(skill, Character.Skills.get(skill));
     }
 
-    @Override
-    public int getLevel() {
-        return 0;
-    }
-
-    @Override
-    public int getMagicPower() {
-        return 0;
-    }
-
-    @Override
-    public String getName() {
-        return "";
-    }
-
-    @Override
-    public String[] getSkills() {
-        return new String[0];
+    public void berserk(){
+        // Something triggers the boss to go berserk this increases the bosses dmg and MP in exchange of some of its health
     }
 
     @Override
