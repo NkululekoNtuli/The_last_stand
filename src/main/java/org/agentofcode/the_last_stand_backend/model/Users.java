@@ -44,6 +44,10 @@ public class Users {
         this.password = password;
     }
 
+
+
+
+
     public int getRating() {
         return rating;
     }
