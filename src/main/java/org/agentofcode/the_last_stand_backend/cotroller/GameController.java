@@ -38,11 +38,13 @@ public class GameController {
     }
 
     @RequestMapping(value = "the-last-stand/game", method = RequestMethod.POST)
-    public static HashMap<String, Object> executeAction(@RequestBody Map<String, Object> data) {
+    public static Map<String, Object> executeAction(@RequestBody Map<String, Object> data) {
 
         String skillToExecute = data.get("skill").toString();
+        System.out.println("the skill is :" + skillToExecute);
         String bossAction = gameService.executeSkill(skillToExecute);
-
-        return new HashMap<String, Object>();
+//        Map<String, Object> playerState = ;
+        Map<String, Object> bossState = new HashMap<>();
+        return new HashMap<>();
     }
 }

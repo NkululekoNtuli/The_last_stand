@@ -2,12 +2,15 @@ package org.agentofcode.the_last_stand_backend.model;
 
 import org.springframework.stereotype.Component;
 
+import java.util.Map;
+
 @Component
 public class Boss implements Character {
     private int health = 200;
     private int level = 0;
     private int magicPower = 100 ;
     private String name;
+
 
     public Boss(){}
 
@@ -34,5 +37,10 @@ public class Boss implements Character {
     @Override
     public String[] getSkills() {
         return new String[0];
+    }
+
+    @Override
+    public Map<String, Object> getCharacterInfo() {
+        return Map.of();
     }
 }

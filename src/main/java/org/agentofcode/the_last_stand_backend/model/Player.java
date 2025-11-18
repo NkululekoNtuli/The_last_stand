@@ -7,7 +7,7 @@ import java.util.Map;
 
 
 @Component
-public class Player {
+public class Player implements Character {
 
     private int health = 200;
     private int level = 0;
@@ -35,26 +35,37 @@ public class Player {
         passiveSkill = chosenSkills[0];
         primarySkill = chosenSkills[1];
         secondarySkill = chosenSkills[2];
-        ultimateSkill = chosenSkills[3];
+//        ultimateSkill = chosenSkills[3];
     }
 
 
-    public int getHealth() {return health;
+    @Override
+    public int getHealth() {
+        return 0;
     }
 
+    @Override
     public int getLevel() {
-        return level;
+        return 0;
     }
 
+    @Override
     public int getMagicPower() {
-        return magicPower;
+        return 0;
     }
 
+    @Override
     public String getName() {
-        return name;
+        return "";
     }
 
+    @Override
     public String[] getSkills() {
-        return new String[] {passiveSkill, primarySkill, secondarySkill, ultimateSkill};
+        return new String[0];
+    }
+
+    @Override
+    public Map<String, Object> getCharacterInfo() {
+        return Map.of();
     }
 }
