@@ -1,5 +1,7 @@
 package org.agentofcode.the_last_stand_backend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -12,12 +14,13 @@ public class Users {
     @Id @GeneratedValue
     private Long id;
     private String userName;
+    @Column(name = "password_hash") @JsonIgnore
     private String password; // remember to hash password in db
     private int rating;
     private Instant created;
 
     public Users() {}
-    public Users(String userName, String password, int rating, Instant created) {
+    public Users(String userName, String password) {
         this.userName = userName;
         this.password = password;
         this.rating = rating;
@@ -43,10 +46,6 @@ public class Users {
     public void setPassword(String password) {
         this.password = password;
     }
-
-
-
-
 
     public int getRating() {
         return rating;

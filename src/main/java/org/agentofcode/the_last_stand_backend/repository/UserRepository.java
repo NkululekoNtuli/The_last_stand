@@ -8,10 +8,11 @@ import java.util.List;
 public interface UserRepository extends JpaRepository<Users, Integer> {
     Users findByUserName(String username);
 
-    List<Users> findAllByRatingGreaterThan(int minRating);
+    Users findAllByRatingGreaterThan(int minRating);
 
     List<Users> findAllByRatingLessThan(int minRating);
 
     List<Users> findUsersByRatingBetween(int minRating, int maxRating);
 
+//    Users findByUserNameAndPassword(String userName);
 }
