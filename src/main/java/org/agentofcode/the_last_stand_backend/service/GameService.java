@@ -22,26 +22,15 @@ public class GameService {
     private static String AI_API_BASE_URL = dotenv.get("AI_API_URL");
 
 
-
     public static void main(String[] args) {
-        boolean payersTurn = true;
+//        boolean payersTurn = true;
 
         boss = new Boss("Demon General", (ArrayList<String>) Character.Skills, 250, 0, 100);
 
-        while (player.getHealth() > 0 &&  boss.getHealth() > 0){
 
-            if (payersTurn) {
-             // execute players move
-                executeSkill(boss, "");
-             payersTurn = false;
-            }else {
-                //execute boss move
-                executeSkill(boss, "");
-            }
-        }
     }
 
-    public String promptAI() {
+    public static String promptAI() {
         ArrayList<String> bossSkills = new ArrayList<>();
         Set<String>  testing = Character.Skills.keySet();
         bossSkills.addAll(testing);
@@ -72,12 +61,12 @@ public class GameService {
             System.out.println("choice is :" + bossAttack);
 
             System.out.println( "the dmg :" + Character.Skills.get(bossAttack));
-            player.decreaseHealth((Integer) Character.Skills.get(bossAttack));
+//            player.decreaseHealth((Integer) Character.Skills.get(bossAttack));
             System.out.println("Player: "+ player.getHealth());
+            return bossAttack;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return "";
     }
 
 
@@ -94,8 +83,30 @@ public class GameService {
     }
 
     public static void executeSkill(BaseCharacter target, String skill){
-    }
+        HashMap<String, Object> skillInfo = (HashMap<String, Object>) Character.Skills.get(skill);
+        String type = (String) skillInfo.get("Type");
+        if (type.equals("Attack")) {
+            boss.decreaseHealth((Integer) skillInfo.get("Value"));
+            player.decreaseMagicPower(10);
+        }
+        else if (type.equals("Sustain")) {
 
+        } else if (type.equals("Area of Attack")) {
+
+        } else if (type.equals("Drain")) {
+
+        } else if (type.equals("Shield")) {
+
+        } else if (type.equals("Reflect")) {
+
+        }else { // for Ultimates
+
+        }
+
+        String bossAttack = promptAI();
+
+        executeBossMove(bossAttack);
+    }
     public String getBossLine() {
         return "";
     }
@@ -117,7 +128,7 @@ public class GameService {
     }
 
 
-    public void executeBossMove() {
+    public static void executeBossMove(String move) {
         //implement boss logic
 
     }
