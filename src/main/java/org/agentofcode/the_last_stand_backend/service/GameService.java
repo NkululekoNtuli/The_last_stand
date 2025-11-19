@@ -22,27 +22,22 @@ public class GameService {
     private static String AI_API_BASE_URL = dotenv.get("AI_API_URL");
 
 
-    public static void main(String[] args) {
-//        boolean payersTurn = true;
-
-        boss = new Boss("Demon General", (ArrayList<String>) Character.Skills, 250, 0, 100);
-
-
+    public GameService() {
+        boss = new Boss("Demon General", Character.abilities, 250, 0, 100);
     }
 
     public static String promptAI() {
         ArrayList<String> bossSkills = new ArrayList<>();
-        Set<String>  testing = Character.Skills.keySet();
-        bossSkills.addAll(testing);
-
-        boss = new Boss("Demon General", bossSkills, 250, 0, 100);
-
-        OkHttpClient client = new OkHttpClient();
+        ArrayList<Ability>  testing = Character.abilities;
+        testing.forEach(ability -> {
+            bossSkills.add(ability.getName());
+        });
 
         String prompt = "You are the boss in this situation, choose a skill to play based on the given information";
         String context = "This is a turn based game. player status is " + player.getCharacterInfo() +
                 " and the boss status is " + boss.getCharacterInfo()  + "Respond only with the skill name.";
 
+        OkHttpClient client = new OkHttpClient();
         HttpUrl url = HttpUrl.parse(AI_API_BASE_URL)
                 .newBuilder()
                 .addQueryParameter("key", AI_API_KEY)
@@ -58,11 +53,7 @@ public class GameService {
         try (Response response = client.newCall(request).execute()) {
             String[] bodyComp = response.body().string().replace("}", "").split(":");
             String bossAttack = bodyComp[bodyComp.length - 1].replace("\"", "");
-            System.out.println("choice is :" + bossAttack);
 
-            System.out.println( "the dmg :" + Character.Skills.get(bossAttack));
-//            player.decreaseHealth((Integer) Character.Skills.get(bossAttack));
-            System.out.println("Player: "+ player.getHealth());
             return bossAttack;
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -82,31 +73,13 @@ public class GameService {
         return new Boss();
     }
 
-    public static void executeSkill(BaseCharacter target, String skill){
-        HashMap<String, Object> skillInfo = (HashMap<String, Object>) Character.Skills.get(skill);
-        String type = (String) skillInfo.get("Type");
-        if (type.equals("Attack")) {
-            boss.decreaseHealth((Integer) skillInfo.get("Value"));
-            player.decreaseMagicPower(10);
-        }
-        else if (type.equals("Sustain")) {
+    public void executeSkill(Ability ability){
 
-        } else if (type.equals("Area of Attack")) {
-
-        } else if (type.equals("Drain")) {
-
-        } else if (type.equals("Shield")) {
-
-        } else if (type.equals("Reflect")) {
-
-        }else { // for Ultimates
-
-        }
-
-        String bossAttack = promptAI();
-
-        executeBossMove(bossAttack);
+        String move = promptAI();
+        executeBossMove(move);
     }
+
+
     public String getBossLine() {
         return "";
     }
@@ -130,6 +103,7 @@ public class GameService {
 
     public static void executeBossMove(String move) {
         //implement boss logic
+        player.decreaseHealth(Character.abiltityMap.get(move).getPower());
 
     }
 

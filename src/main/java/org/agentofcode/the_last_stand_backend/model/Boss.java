@@ -9,8 +9,8 @@ import java.util.Map;
 @Component
 public class Boss extends BaseCharacter {
     public Boss(){}
-    public Boss(String name, ArrayList<String> skills, int health, int level, int magicPower) {
-        super(name, skills, health, level, magicPower);
+    public Boss(String name, ArrayList<Ability> abilities, int health, int level, int magicPower) {
+        super(name, abilities, health, level, magicPower);
     }
 
     public void berserk(){

@@ -10,7 +10,7 @@ public class Player extends BaseCharacter {
 
     public Player(){super();}
 
-    public Player(String name, ArrayList<String> skills, int health, int level, int magicPower){
-        super(name, skills, health, level, magicPower);
+    public Player(String name, ArrayList<Ability> abilities, int health, int level, int magicPower){
+        super(name, abilities, health, level, magicPower);
     }
 }

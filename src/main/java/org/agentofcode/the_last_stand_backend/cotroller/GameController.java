@@ -1,5 +1,6 @@
 package org.agentofcode.the_last_stand_backend.cotroller;
 
+import org.agentofcode.the_last_stand_backend.model.Ability;
 import org.agentofcode.the_last_stand_backend.model.Boss;
 import org.agentofcode.the_last_stand_backend.model.Character;
 import org.agentofcode.the_last_stand_backend.model.Player;
@@ -17,15 +18,17 @@ public class GameController {
     private static GameService gameService;
 
     public GameController(GameService gameService){
-        this.gameService = gameService;
+        GameController.gameService = gameService;
     }
 
     @RequestMapping(value = "/character/creation", method = RequestMethod.POST)
     public static HashMap<String, Object> creatCharacter(@RequestBody Map<String, Object> data) {
         String name = data.get("name").toString();
         System.out.println(data.get("skills").getClass());
-        ArrayList<String> skills = (ArrayList<String>) data.get("skills");
-        Character playerCharacter = new Player(name, skills, 100, 100, 50);
+        ArrayList<String> abilitiesNames = (ArrayList<String>) data.get("skills");
+        ArrayList<Ability>  abilities = new ArrayList<>();
+        abilitiesNames.forEach(a -> {abilities.add(Character.abiltityMap.get(a));});
+        Character playerCharacter = new Player(name, abilities, 100, 0, 50);
         gameService.insertPlayer(playerCharacter);
         System.out.println("player info: "+ playerCharacter.getCharacterInfo());
 
@@ -34,10 +37,8 @@ public class GameController {
 
     @RequestMapping(value = "the-last-stand/game", method = RequestMethod.POST)
     public static HashMap<String, Object> executeAction(@RequestBody Map<String, Object> data) {
-
-
-        gameService.promptAI();
-        Map<String, Object> bossState = new HashMap<>();
+        String abilityName = data.get("ability").toString();
+        gameService.executeSkill(Character.abiltityMap.get(abilityName));
         return gameService.gameState();
     }
 }
