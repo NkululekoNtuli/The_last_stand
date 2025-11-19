@@ -9,10 +9,10 @@ import java.util.Map;
 @Component
 public interface Character {
 
-    int health = 0;
-    int level = 0;
-    int magicPower = 0 ;
-    String name = "";
+//    int health = 0;
+//    int level = 0;
+//    int magicPower = 0 ;
+//    String name = "";
 
     Map<String, Object> Skills = new HashMap<>(Map.ofEntries(
             Map.entry("Atomic Blast", 22),             // High AoE burst
@@ -55,5 +55,5 @@ public interface Character {
 
     void increaseMagicPower(int magicPower);
 
-    public Map<String, Object> getCharacterInfo();
+    public HashMap<String, Object> getCharacterInfo();
 }
