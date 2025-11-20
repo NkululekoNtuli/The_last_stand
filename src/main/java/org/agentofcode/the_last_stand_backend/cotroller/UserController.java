@@ -1,8 +1,12 @@
 package org.agentofcode.the_last_stand_backend.cotroller;
 
+import org.agentofcode.the_last_stand_backend.repository.UserRepository;
+import org.hibernate.NonUniqueResultException;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.agentofcode.the_last_stand_backend.model.Users;
 import org.agentofcode.the_last_stand_backend.service.UserService;
+import org.sqlite.SQLiteException;
 
 import java.util.Map;
 
@@ -10,10 +14,12 @@ import java.util.Map;
 @SessionAttributes("name")
 public class UserController {
 
+    private final UserRepository userRepository;
     private UserService userService;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, UserRepository userRepository) {
         this.userService = userService;
+        this.userRepository = userRepository;
     }
 
 // Do not forget to hash the password  from the front and from BL to DB
@@ -32,7 +38,21 @@ public class UserController {
 
     @RequestMapping(value = "/user-registration", method = RequestMethod.POST)
     public String registerUser(@RequestBody Map<String, String> data) {
-        userService.registerUser(data.get("name"), data.get("password"));
-        return userService.getUserByName(data.get("name")).toString();
+        String name = data.get("name");
+        String password = data.get("password");
+        System.out.println("name is: "+ name);
+        System.out.println("password is :  "+ password);
+//        Users users = new Users(userName, password);
+//        System.out.println(userRepository.findUsersByName(name).getUserName());
+        //            userRepository.findUsersByName(name);
+        try{
+            userService.registerUser(name, password);
+            return userService.getUserByName(data.get("name")).toString();
+        }catch (Exception e){
+            return "USER NAME TAKEN";
+        }
+//        userService.registerUser(name, password);
+//        return userService.getUserByName(data.get("name")).toString();
+        //        if (userRepository.findUsersByName(name) != null ) return  "usertaken";//return ResponseEntity.status(400).body("Name already taken!");
     }
 }

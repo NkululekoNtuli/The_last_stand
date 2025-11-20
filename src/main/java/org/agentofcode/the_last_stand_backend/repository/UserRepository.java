@@ -6,13 +6,14 @@ import org.agentofcode.the_last_stand_backend.model.Users;
 import java.util.List;
 
 public interface UserRepository extends JpaRepository<Users, Integer> {
-    Users findByUserName(String username);
 
-    Users findAllByRatingGreaterThan(int minRating);
+    Users findUsersByName(String name);
 
-    List<Users> findAllByRatingLessThan(int minRating);
+//    Users findAllByRatingGreaterThan(int minRating);
 
-    List<Users> findUsersByRatingBetween(int minRating, int maxRating);
+//    List<Users> findAllByRatingLessThan(int minRating);
+
+//    List<Users> findUsersByRatingBetween(int minRating, int maxRating);
 
 //    Users findByUserNameAndPassword(String userName);
 }

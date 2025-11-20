@@ -24,8 +24,7 @@ public class GameController {
     @RequestMapping(value = "/character/creation", method = RequestMethod.POST)
     public static HashMap<String, Object> creatCharacter(@RequestBody Map<String, Object> data) {
         String name = data.get("name").toString();
-        System.out.println(data.get("skills").getClass());
-        ArrayList<String> abilitiesNames = (ArrayList<String>) data.get("skills");
+        ArrayList<String> abilitiesNames = (ArrayList<String>) data.get("abilities");
         ArrayList<Ability>  abilities = new ArrayList<>();
         abilitiesNames.forEach(a -> {abilities.add(Character.abiltityMap.get(a));});
         Character playerCharacter = new Player(name, abilities, 100, 0, 50);

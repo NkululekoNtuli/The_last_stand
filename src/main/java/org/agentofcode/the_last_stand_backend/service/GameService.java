@@ -108,7 +108,10 @@ public class GameService {
     }
 
     public HashMap<String, Object> gameState(){
-        return player.getCharacterInfo();
+        HashMap<String, Object> gameState = new HashMap<>();
+        gameState.put("player", player.getCharacterInfo());
+        gameState.put("boss", boss.getCharacterInfo());
+        return gameState;
     }
 
 }
