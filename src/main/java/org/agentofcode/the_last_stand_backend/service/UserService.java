@@ -31,7 +31,9 @@ public class UserService {
 
     public boolean isValidUser(String name, String password) {
         Users user = userRepository.findUsersByName(name);
+//        System.out.println(user.getUserName());
         if (user == null) {
+            System.out.println("....");
             return false;
         }
         return passwordEncoder.matches(password, user.getPassword());

@@ -20,7 +20,7 @@ public class SecurityConfig {
         httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/user-registration", "/user-login", "/character/creation", "/the-last-stand/game").permitAll()
+                        .requestMatchers("/the-last-stand/registration", "/the-last-stand/login", "/the-last-stand/character/creation", "/the-last-stand/game").permitAll()
                         .anyRequest().authenticated()
                 )
                 .httpBasic(httpBasic -> {})
