@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:5173") // implement cors config later
 public class GameController {
 
     private static GameService gameService;
