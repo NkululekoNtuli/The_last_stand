@@ -10,23 +10,24 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 @Service
 public class GameService {
 
-    private static Player player;
-    private static Boss boss;
-    private static Dotenv dotenv = Dotenv.load();
-    private static String AI_API_KEY = dotenv.get("AI_API_KEY");
-    private static String AI_API_BASE_URL = dotenv.get("AI_API_URL");
-
+    private Player player;
+    private Boss boss;
+    private Dotenv dotenv = Dotenv.load();
+    private String AI_API_KEY = dotenv.get("AI_API_KEY");
+    private String AI_API_BASE_URL = dotenv.get("AI_API_URL");
+    private ConcurrentHashMap<String, GameState> gameStates = new ConcurrentHashMap<>();
 
     public GameService() {
         boss = new Boss("Demon General", Character.abilities, 250, 0, 100);
     }
 
-    public static String promptAI() {
+    public String promptAI() {
         ArrayList<String> bossSkills = new ArrayList<>();
         ArrayList<Ability>  testing = Character.abilities;
         testing.forEach(ability -> {
@@ -60,10 +61,12 @@ public class GameService {
         }
     }
 
-
-    public void insertPlayer( Character newPlayer){
+    public void creatGameState( String userId, Character newPlayer){
         player = (Player) newPlayer;
+        gameStates.put(userId, new GameState(player, boss));
+
     }
+
 
     public String gameIntro(){
         return "";
@@ -73,12 +76,14 @@ public class GameService {
         return new Boss();
     }
 
-    public void executeSkill(Ability ability){
+    public void executeSkill(String userId, Ability ability){
+        GameState game = gameStates.get(userId);
+        player = game.getPlayer();
+        boss = game.getBoss();
 
         String move = promptAI();
         executeBossMove(move);
     }
-
 
     public String getBossLine() {
         return "";
@@ -100,18 +105,14 @@ public class GameService {
         //implement mp check
     }
 
-
-    public static void executeBossMove(String move) {
+    public void executeBossMove(String move) {
         //implement boss logic
         player.decreaseHealth(Character.abiltityMap.get(move).getPower());
 
     }
 
-    public HashMap<String, Object> gameState(){
-        HashMap<String, Object> gameState = new HashMap<>();
-        gameState.put("player", player.getCharacterInfo());
-        gameState.put("boss", boss.getCharacterInfo());
-        return gameState;
+    public HashMap<String, Object> gameState(String userId){
+        return gameStates.get(userId).getGameState();
     }
 
 }

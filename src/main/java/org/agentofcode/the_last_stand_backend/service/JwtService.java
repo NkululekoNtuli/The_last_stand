@@ -13,11 +13,13 @@ public class JwtService {
 
     private final Key secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
+//    public JwtService(){}
+
     public String generateToken(String username) {
         return Jwts.builder()
                 .setSubject(username)
                 .setIssuer("GameBackend")
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60)) // 1 hour
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60)) // maybe increase to 5 hours?
                 .setIssuedAt(new Date())
                 .signWith(secretKey)
                 .compact();
@@ -30,4 +32,30 @@ public class JwtService {
                 .getBody()
                 .getSubject();
     }
+
+
+
+    public String extractUserId(String token) {
+        try {
+            return Jwts.parser()
+                    .setSigningKey(secretKey)
+                    .parseClaimsJws(token)
+                    .getBody()
+                    .getSubject();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+
+    //    private static final String SECRET = "replace-with-a-real-secret-key";
+
+//    public String generateToken(String userId) {
+//        return Jwts.builder()
+//                .setSubject(userId)
+//                .setIssuedAt(new Date())
+//                .setExpiration(new Date(System.currentTimeMillis() + 86400000))
+//                .signWith(SignatureAlgorithm.HS256, SECRET)
+//                .compact();
+//    }
 }
