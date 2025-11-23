@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -111,8 +112,22 @@ public class GameService {
 
     }
 
-    public HashMap<String, Object> gameState(String userId){
-        return gameStates.get(userId).getGameState();
+    public Map<String, Object> gameState(String userId){
+        HashMap<String, Object> state = gameStates.get(userId).getGameState();
+        Player player = (Player) state.get("player");
+        Boss boss = (Boss) state.get("boss");
+
+        return Map.of("playerName", player.getName(),
+                "playerLevel", player.getLevel(),
+                "playerHP", player.getHealth(),
+                "playerMana", player.getMana(),
+                "playerAbilities", player.getAbilities(),
+                "enemyName", boss.getName(),
+                "enemyLevel", boss.getLevel(),
+                "enemyHP", boss.getHealth(),
+                "enemyMana", boss.getMana(),
+                "enemyAbilities", boss.getAbilities()
+        );
     }
 
 }

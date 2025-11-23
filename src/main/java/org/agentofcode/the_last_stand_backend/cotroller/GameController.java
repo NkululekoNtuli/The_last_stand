@@ -41,7 +41,6 @@ public class GameController {
         Character playerCharacter = new Player(name, abilities, 100, 0, 50);
         gameService.creatGameState(userId, playerCharacter);
 
-//        return gameService.gameState();
         return ResponseEntity.ok(gameService.gameState(userId));
     }
 

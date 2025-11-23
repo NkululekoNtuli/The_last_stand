@@ -27,8 +27,8 @@ public class GameState {
 
     public HashMap<String, Object> getGameState(){
         HashMap<String, Object> state = new HashMap<>();
-        state.put("player", player.getCharacterInfo());
-        state.put("boss", boss.getCharacterInfo());
+        state.put("player", player);
+        state.put("boss", boss);
         return state;
     }
 

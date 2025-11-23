@@ -34,7 +34,7 @@ public abstract class BaseCharacter implements Character{
     public int getLevel() {return level;}
 
     @Override
-    public int getMagicPower() {return magicPower;}
+    public int getMana() {return magicPower;}
 
     @Override
     public String getName() {return name;}

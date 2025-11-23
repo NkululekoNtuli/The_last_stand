@@ -1,5 +1,6 @@
 package org.agentofcode.the_last_stand_backend.cotroller;
 
+import org.agentofcode.the_last_stand_backend.model.Character;
 import org.agentofcode.the_last_stand_backend.repository.UserRepository;
 import org.agentofcode.the_last_stand_backend.service.JwtService;
 import org.hibernate.NonUniqueResultException;
@@ -40,20 +41,25 @@ public class UserController {
             Users validUser = userService.getUserByName(userName);
             token = jwtService.generateToken(validUser.getUserName());
         }
-        return ResponseEntity.ok(Map.of("token", token));
+        return ResponseEntity.ok(Map.of("token", token, "abilities", Character.abilityNames));
     }
 
     @PostMapping(value = "/registration")
     public ResponseEntity<?> registerUser(@RequestBody Map<String, String> data) {
-        String name = data.get("name");
+        String userName = data.get("name");
         String password = data.get("password");
-        System.out.println("name is: "+ name);
-        System.out.println("password is :  "+ password);
+
+//        String token = null;
         try{
-            userService.registerUser(name, password);
-            return  ResponseEntity.ok(data.get("name"));//userService.getUserByName(data.get("name")).toString();
+            userService.registerUser(userName, password);
+            Users validUser = userService.getUserByName(userName);
+//            token = jwtService.generateToken(validUser.getUserName());
+            System.out.println("hello");
+//            return  ResponseEntity.ok(Map.of("token", token, "name",data.get("name")));
+            return  ResponseEntity.ok(Map.of( "name",data.get("name")));
         }catch (Exception e){
-            return ResponseEntity.ok(Map.of("result", "Username taken"));
+            System.out.println("hello2");
+            return ResponseEntity.status(401).body(Map.of("error", "UserName Already Taken!"));//ResponseEntity.ok(Map.of("result", "Username taken"));
         }
     }
 }
