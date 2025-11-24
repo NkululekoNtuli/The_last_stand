@@ -41,7 +41,9 @@ public class GameController {
         Character playerCharacter = new Player(name, abilities, 100, 0, 50);
         gameService.creatGameState(userId, playerCharacter);
 
+//        return ResponseEntity.ok(gameService.gameState(userId));
         return ResponseEntity.ok(gameService.gameState(userId));
+
     }
 
     @PostMapping(value = "/game")

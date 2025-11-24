@@ -117,7 +117,8 @@ public class GameService {
         Player player = (Player) state.get("player");
         Boss boss = (Boss) state.get("boss");
 
-        return Map.of("playerName", player.getName(),
+        return Map.of(
+                "playerName", player.getName(),
                 "playerLevel", player.getLevel(),
                 "playerHP", player.getHealth(),
                 "playerMana", player.getMana(),
