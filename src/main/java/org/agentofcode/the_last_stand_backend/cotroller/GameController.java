@@ -1,20 +1,16 @@
 package org.agentofcode.the_last_stand_backend.cotroller;
 
 import org.agentofcode.the_last_stand_backend.model.Ability;
-import org.agentofcode.the_last_stand_backend.model.Boss;
 import org.agentofcode.the_last_stand_backend.model.Character;
 import org.agentofcode.the_last_stand_backend.model.Player;
 import org.agentofcode.the_last_stand_backend.service.GameService;
 import org.agentofcode.the_last_stand_backend.service.JwtService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.config.annotation.web.session.SessionSecurityMarker;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.validation.annotation.Validated;
+
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -38,7 +34,7 @@ public class GameController {
         ArrayList<Ability>  abilities = new ArrayList<>();
         abilitiesNames.forEach(a -> {abilities.add(Character.abiltityMap.get(a));});
 
-        Character playerCharacter = new Player(name, abilities, 100, 0, 50);
+        Character playerCharacter = new Player(name, abilities, 100, 0, 100);
         gameService.creatGameState(userId, playerCharacter);
 
 //        return ResponseEntity.ok(gameService.gameState(userId));
@@ -49,6 +45,7 @@ public class GameController {
     @PostMapping(value = "/game")
     public ResponseEntity<?> executeAction(@RequestBody Map<String, Object> data, @AuthenticationPrincipal String userId ) {
         String abilityName = data.get("ability").toString();
+        System.out.println("2the ability:" + abilityName);
         gameService.executeSkill(userId, Character.abiltityMap.get(abilityName));
         return ResponseEntity.ok(gameService.gameState(userId));
     }

@@ -25,7 +25,7 @@ public class GameService {
     private ConcurrentHashMap<String, GameState> gameStates = new ConcurrentHashMap<>();
 
     public GameService() {
-        boss = new Boss("Demon General", Character.abilities, 250, 0, 100);
+        boss = new Boss("Demon General", Character.abilities, 100, 0, 100);
     }
 
     public String promptAI() {
@@ -78,9 +78,12 @@ public class GameService {
     }
 
     public void executeSkill(String userId, Ability ability){
+        System.out.println("the :" + ability);
         GameState game = gameStates.get(userId);
         player = game.getPlayer();
+        player.decreaseMagicPower(Character.abiltityMap.get(ability).getManaCost());
         boss = game.getBoss();
+        boss.decreaseHealth(Character.abiltityMap.get(ability).getPower());
 
         String move = promptAI();
         executeBossMove(move);
