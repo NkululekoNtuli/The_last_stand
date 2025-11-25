@@ -37,7 +37,6 @@ public class GameController {
         Character playerCharacter = new Player(name, abilities, 100, 0, 100);
         gameService.creatGameState(userId, playerCharacter);
 
-//        return ResponseEntity.ok(gameService.gameState(userId));
         return ResponseEntity.ok(gameService.gameState(userId));
 
     }
@@ -45,7 +44,6 @@ public class GameController {
     @PostMapping(value = "/game")
     public ResponseEntity<?> executeAction(@RequestBody Map<String, Object> data, @AuthenticationPrincipal String userId ) {
         String abilityName = data.get("ability").toString();
-        System.out.println("2the ability:" + abilityName);
         gameService.executeSkill(userId, Character.abiltityMap.get(abilityName));
         return ResponseEntity.ok(gameService.gameState(userId));
     }

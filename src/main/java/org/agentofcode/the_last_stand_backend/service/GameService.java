@@ -78,12 +78,11 @@ public class GameService {
     }
 
     public void executeSkill(String userId, Ability ability){
-        System.out.println("the :" + ability);
         GameState game = gameStates.get(userId);
         player = game.getPlayer();
-        player.decreaseMagicPower(Character.abiltityMap.get(ability).getManaCost());
+        player.decreaseMagicPower(ability.getManaCost());
         boss = game.getBoss();
-        boss.decreaseHealth(Character.abiltityMap.get(ability).getPower());
+        boss.decreaseHealth(ability.getPower());
 
         String move = promptAI();
         executeBossMove(move);
