@@ -80,9 +80,14 @@ public class GameService {
     public void executeSkill(String userId, Ability ability){
         GameState game = gameStates.get(userId);
         player = game.getPlayer();
-        player.decreaseMagicPower(ability.getManaCost());
         boss = game.getBoss();
-        boss.decreaseHealth(ability.getPower());
+        player.decreaseMagicPower(ability.getManaCost());
+
+        if (ability.getType().equalsIgnoreCase("cleans")){
+            player.increaseHealth(ability.getPower());
+        }else {
+            boss.decreaseHealth(ability.getPower());
+        }
 
         String move = promptAI();
         executeBossMove(move);
