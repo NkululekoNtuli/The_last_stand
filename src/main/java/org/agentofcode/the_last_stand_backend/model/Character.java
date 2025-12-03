@@ -22,27 +22,55 @@ public interface Character {
 
     ArrayList<Ability> abilities = new ArrayList<>( List.of
             (
-            new Ability("Atomic Blast", 22, aoe, mana, coolD),
-            new Ability("Bleed", 12, damage, mana,coolD),
-            new Ability("World Cutting Slash", 28, damage, mana, coolD),
-            new Ability("Laser Beam", 18, damage, mana, coolD),
-            new Ability("Energy Blast", 14, damage, mana, coolD),
-            new Ability("Blind", 8, debuff, mana, coolD),
-            new Ability("Heal", 16, cleans, mana, coolD),
-            new Ability("Hell Fire", 20, aoe, mana, coolD),
-            new Ability("Cleave", 17, aoe, mana, coolD),
-            new Ability("Stun", 10, cc, mana, coolD),
-            new Ability("Shadow Strike", 15, aoe, mana, coolD),
-            new Ability("Frost Nova", 16, aoe, mana, coolD),
-            new Ability("Dragon Roar", 12, debuff, mana, coolD),
-            new Ability("Meteor Crash", 25, aoe, mana, coolD),
-            new Ability("Thunder Lance", 18, damage, mana, coolD),
-            new Ability("Spirit Shield", 14, buff, mana, coolD),
-            new Ability("Rage Boost", 10, buff, mana, coolD),
-            new Ability("Blood Drain", 13, damage, mana, coolD),
-            new Ability("Phoenix Feather", 20, cleans, mana, coolD),
-            new Ability("Void Rend", 26, damage, mana, coolD)
-    ));
+                    // ---- FIRE ----
+                    new Ability("Flame Burst", 18, damage, mana, coolD),
+                    new Ability("Inferno Wave", 24, aoe, mana, coolD),
+                    new Ability("Scorch Mark", 12, debuff, mana, coolD),
+                    new Ability("Phoenix Rebirth", 20, cleans, mana, coolD),
+
+                    // ---- WATER / ICE ----
+                    new Ability("Aqua Blade", 14, damage, mana, coolD),
+                    new Ability("Tidal Crash", 22, aoe, mana, coolD),
+                    new Ability("Frostbite", 16, debuff, mana, coolD),
+                    new Ability("Glacial Prison", 10, cc, mana, coolD),
+
+                    // ---- EARTH ----
+                    new Ability("Stone Fist", 15, damage, mana, coolD),
+                    new Ability("Earthquake", 26, aoe, mana, coolD),
+                    new Ability("Iron Skin", 14, buff, mana, coolD),
+                    new Ability("Root Snare", 11, cc, mana, coolD),
+
+                    // ---- AIR ----
+                    new Ability("Gale Slash", 17, damage, mana, coolD),
+                    new Ability("Hurricane Spiral", 23, aoe, mana, coolD),
+                    new Ability("Wind Shield", 14, buff, mana, coolD),
+                    new Ability("Silence Gust", 10, debuff, mana, coolD),
+
+                    // ---- LIGHTNING ----
+                    new Ability("Shock Bolt", 16, damage, mana, coolD),
+                    new Ability("Storm Spear", 20, damage, mana, coolD),
+                    new Ability("Chain Lightning", 25, aoe, mana, coolD),
+                    new Ability("Static Charge", 12, debuff, mana, coolD),
+
+                    // ---- SHADOW ----
+                    new Ability("Night Slash", 18, damage, mana, coolD),
+                    new Ability("Umbral Nova", 24, aoe, mana, coolD),
+                    new Ability("Fear Gaze", 10, cc, mana, coolD),
+                    new Ability("Life Leech", 14, damage, mana, coolD),
+
+                    // ---- LIGHT ----
+                    new Ability("Radiant Beam", 17, damage, mana, coolD),
+                    new Ability("Holy Pulse", 22, aoe, mana, coolD),
+                    new Ability("Blessing Aura", 14, buff, mana, coolD),
+                    new Ability("Purify", 18, cleans, mana, coolD),
+
+                    // ---- ARCANE ----
+                    new Ability("Arcane Missile", 16, damage, mana, coolD),
+                    new Ability("Mana Rift", 20, debuff, mana, coolD),
+                    new Ability("Astral Storm", 26, aoe, mana, coolD),
+                    new Ability("Arcane Shield", 15, buff, mana, coolD)
+            )
+    );
 
     Map<String, Ability> abiltityMap = abilities.stream()
             .collect(Collectors.toMap(Ability::getName, a -> a));
