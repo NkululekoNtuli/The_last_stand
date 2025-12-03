@@ -7,10 +7,7 @@ import org.agentofcode.the_last_stand_backend.model.Character;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 
@@ -89,8 +86,9 @@ public class GameService {
             boss.decreaseHealth(ability.getPower());
         }
 
-        String move = promptAI();
-        executeBossMove(move);
+//        String move = promptAI();
+//        executeBossMove(move);
+        executeBossMove();
     }
 
     public String getBossLine() {
@@ -113,9 +111,14 @@ public class GameService {
         //implement mp check
     }
 
-    public void executeBossMove(String move) {
+    public void executeBossMove() {
         //implement boss logic
-        player.decreaseHealth(Character.abiltityMap.get(move).getPower());
+        Random random = new Random();
+
+        ArrayList<Ability> abilities = boss.getAbilities();
+        Ability  move = abilities.get(random.nextInt(abilities.size() + 1));
+
+        player.decreaseHealth(move.getPower());
 
     }
 
