@@ -117,7 +117,7 @@ public class GameService {
 
         ArrayList<Ability> abilities = boss.getAbilities();
         Ability  move = abilities.get(random.nextInt(abilities.size() + 1));
-
+        boss.setAbilityUsed(move.getName());
         player.decreaseHealth(move.getPower());
 
     }
@@ -127,17 +127,18 @@ public class GameService {
         Player player = (Player) state.get("player");
         Boss boss = (Boss) state.get("boss");
 
-        return Map.of(
-                "playerName", player.getName(),
-                "playerLevel", player.getLevel(),
-                "playerHP", player.getHealth(),
-                "playerMana", player.getMana(),
-                "playerAbilities", player.getAbilities(),
-                "enemyName", boss.getName(),
-                "enemyLevel", boss.getLevel(),
-                "enemyHP", boss.getHealth(),
-                "enemyMana", boss.getMana(),
-                "enemyAbilities", boss.getAbilities()
+        return Map.ofEntries(
+                Map.entry("playerName", player.getName()),
+                Map.entry("playerLevel", player.getLevel()),
+                Map.entry("playerHP", player.getHealth()),
+                Map.entry("playerMana", player.getMana()),
+                Map.entry("playerAbilities", player.getAbilities()),
+                Map.entry("enemyName", boss.getName()),
+                Map.entry("enemyLevel", boss.getLevel()),
+                Map.entry("enemyHP", boss.getHealth()),
+                Map.entry("enemyMana", boss.getMana()),
+                Map.entry("enemyAbilities", boss.getAbilities()),
+                Map.entry("enemyAbilityUsed", boss.getAbilityUsed())
         );
     }
 

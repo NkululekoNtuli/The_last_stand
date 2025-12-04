@@ -8,9 +8,19 @@ import java.util.Map;
 
 @Component
 public class Boss extends BaseCharacter {
+    private String abilityUsed = "none";
+
     public Boss(){}
     public Boss(String name, ArrayList<Ability> abilities, int health, int level, int magicPower) {
         super(name, abilities, health, level, magicPower);
+    }
+
+    public String getAbilityUsed() {
+        return abilityUsed;
+    }
+
+    public void setAbilityUsed(String abilityUsed) {
+        this.abilityUsed = abilityUsed;
     }
 
     public void berserk(){
