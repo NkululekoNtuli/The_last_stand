@@ -80,12 +80,15 @@ public interface Character {
             .collect(Collectors.toCollection(ArrayList::new));
 
 
-
     int getHealth();
 
     int getLevel();
 
     int getMana();
+
+    int getMaxHealth();
+
+    int getMaxMana();
 
     String getName();
 
@@ -93,11 +96,15 @@ public interface Character {
 
     void decreaseHealth(int damage);
 
-    void decreaseMagicPower(int magicPower);
+    void decreaseMana(int magicPower);
 
     void increaseHealth(int health);
 
     void increaseMagicPower(int magicPower);
+
+    void increaseMaxHealth(int health);
+
+    void increaseMaxMana(int mana);
 
     public HashMap<String, Object> getCharacterInfo();
 }

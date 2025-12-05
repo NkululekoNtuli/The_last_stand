@@ -26,4 +26,5 @@ public class Boss extends BaseCharacter {
     public void berserk(){
         // Something triggers the boss to go berserk this increases the bosses dmg and MP in exchange of some of its health
     }
+
 }

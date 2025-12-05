@@ -22,7 +22,7 @@ public class GameService {
     private ConcurrentHashMap<String, GameState> gameStates = new ConcurrentHashMap<>();
 
     public GameService() {
-        boss = new Boss("Demon General", Character.abilities, 100, 0, 100);
+        boss = new Boss("Demon General", Character.abilities, 500, 0, 600);
     }
 
     public String promptAI() {
@@ -78,7 +78,7 @@ public class GameService {
         GameState game = gameStates.get(userId);
         player = game.getPlayer();
         boss = game.getBoss();
-        player.decreaseMagicPower(ability.getManaCost());
+        player.decreaseMana(ability.getManaCost());
 
         if (ability.getType().equalsIgnoreCase("cleans")){
             player.increaseHealth(ability.getPower());
@@ -116,7 +116,7 @@ public class GameService {
         Random random = new Random();
 
         ArrayList<Ability> abilities = boss.getAbilities();
-        Ability  move = abilities.get(random.nextInt(abilities.size() + 1));
+        Ability  move = abilities.get(random.nextInt(abilities.size()));
         boss.setAbilityUsed(move.getName());
         player.decreaseHealth(move.getPower());
 
@@ -133,12 +133,16 @@ public class GameService {
                 Map.entry("playerHP", player.getHealth()),
                 Map.entry("playerMana", player.getMana()),
                 Map.entry("playerAbilities", player.getAbilities()),
+                Map.entry("playerMaxHP", player.getMaxHealth()),
+                Map.entry("playerMaxMana", player.getMaxMana()),
                 Map.entry("enemyName", boss.getName()),
                 Map.entry("enemyLevel", boss.getLevel()),
                 Map.entry("enemyHP", boss.getHealth()),
                 Map.entry("enemyMana", boss.getMana()),
                 Map.entry("enemyAbilities", boss.getAbilities()),
-                Map.entry("enemyAbilityUsed", boss.getAbilityUsed())
+                Map.entry("enemyAbilityUsed", boss.getAbilityUsed()),
+                Map.entry("enemyMaxHP", boss.getMaxHealth()),
+                Map.entry("enemyMaxMana", boss.getMaxMana())
         );
     }
 

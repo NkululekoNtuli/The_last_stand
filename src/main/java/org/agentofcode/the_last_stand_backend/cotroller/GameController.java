@@ -34,7 +34,7 @@ public class GameController {
         ArrayList<Ability>  abilities = new ArrayList<>();
         abilitiesNames.forEach(a -> {abilities.add(Character.abiltityMap.get(a));});
 
-        Character playerCharacter = new Player(name, abilities, 100, 0, 100);
+        Character playerCharacter = new Player(name, abilities, 300, 0, 150);
         gameService.creatGameState(userId, playerCharacter);
 
         return ResponseEntity.ok(gameService.gameState(userId));
