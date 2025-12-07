@@ -123,27 +123,31 @@ public class GameService {
     }
 
     public Map<String, Object> gameState(String userId){
-        HashMap<String, Object> state = gameStates.get(userId).getGameState();
-        Player player = (Player) state.get("player");
-        Boss boss = (Boss) state.get("boss");
+//        HashMap<String, Object> state = gameStates.get(userId).getGameState();
+//        Player player = (Player) state.get("player");
+//        Boss boss = (Boss) state.get("boss");
 
-        return Map.ofEntries(
-                Map.entry("playerName", player.getName()),
-                Map.entry("playerLevel", player.getLevel()),
-                Map.entry("playerHP", player.getHealth()),
-                Map.entry("playerMana", player.getMana()),
-                Map.entry("playerAbilities", player.getAbilities()),
-                Map.entry("playerMaxHP", player.getMaxHealth()),
-                Map.entry("playerMaxMana", player.getMaxMana()),
-                Map.entry("enemyName", boss.getName()),
-                Map.entry("enemyLevel", boss.getLevel()),
-                Map.entry("enemyHP", boss.getHealth()),
-                Map.entry("enemyMana", boss.getMana()),
-                Map.entry("enemyAbilities", boss.getAbilities()),
-                Map.entry("enemyAbilityUsed", boss.getAbilityUsed()),
-                Map.entry("enemyMaxHP", boss.getMaxHealth()),
-                Map.entry("enemyMaxMana", boss.getMaxMana())
-        );
+//        return Map.ofEntries(
+//                Map.entry("playerName", player.getName()),
+//                Map.entry("playerLevel", player.getLevel()),
+//                Map.entry("playerHP", player.getHealth()),
+//                Map.entry("playerMana", player.getMana()),
+//                Map.entry("playerAbilities", player.getAbilities()),
+//                Map.entry("playerMaxHP", player.getMaxHealth()),
+//                Map.entry("playerMaxMana", player.getMaxMana()),
+//                Map.entry("enemyName", boss.getName()),
+//                Map.entry("enemyLevel", boss.getLevel()),
+//                Map.entry("enemyHP", boss.getHealth()),
+//                Map.entry("enemyMana", boss.getMana()),
+//                Map.entry("enemyAbilities", boss.getAbilities()),
+//                Map.entry("enemyAbilityUsed", boss.getAbilityUsed()),
+//                Map.entry("enemyMaxHP", boss.getMaxHealth()),
+//                Map.entry("enemyMaxMana", boss.getMaxMana())
+//        );
+        return gameStates.get(userId).getGameState();
     }
 
+    public void endGame(String userId) {
+        gameStates.remove(userId);
+    }
 }

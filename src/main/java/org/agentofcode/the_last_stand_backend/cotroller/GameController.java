@@ -5,6 +5,7 @@ import org.agentofcode.the_last_stand_backend.model.Character;
 import org.agentofcode.the_last_stand_backend.model.Player;
 import org.agentofcode.the_last_stand_backend.service.GameService;
 import org.agentofcode.the_last_stand_backend.service.JwtService;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
@@ -47,4 +48,12 @@ public class GameController {
         gameService.executeSkill(userId, Character.abiltityMap.get(abilityName));
         return ResponseEntity.ok(gameService.gameState(userId));
     }
+
+    @PostMapping(value = "/endGame")
+    public ResponseEntity<?> endGame(@RequestBody Map<String, Object> data, @AuthenticationPrincipal String userId) {
+//        String action = data.get("").toString();
+        gameService.endGame(userId);
+        return ResponseEntity.ok(HttpEntity.EMPTY);
+    }
+
 }

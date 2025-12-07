@@ -54,7 +54,8 @@ public class SecurityConfig {
                 .requestMatchers(
                         "/the-last-stand/registration",
                         "/the-last-stand/login",
-                        "/the-last-stand/character/creation"
+                        "/the-last-stand/character/creation",
+                        "/endGame"
                 ).permitAll()
                 .anyRequest().authenticated()
         );

@@ -22,49 +22,49 @@ public interface Character {
 
     ArrayList<Ability> abilities = new ArrayList<>( List.of
             (
-                    // ---- FIRE ----
+                    // fire
                     new Ability("Flame Burst", 18, damage, mana, coolD),
                     new Ability("Inferno Wave", 24, aoe, mana, coolD),
                     new Ability("Scorch Mark", 12, debuff, mana, coolD),
                     new Ability("Phoenix Rebirth", 20, cleans, mana, coolD),
 
-                    // ---- WATER / ICE ----
+                    // water ice
                     new Ability("Aqua Blade", 14, damage, mana, coolD),
                     new Ability("Tidal Crash", 22, aoe, mana, coolD),
                     new Ability("Frostbite", 16, debuff, mana, coolD),
                     new Ability("Glacial Prison", 10, cc, mana, coolD),
 
-                    // ---- EARTH ----
+                    // earth
                     new Ability("Stone Fist", 15, damage, mana, coolD),
                     new Ability("Earthquake", 26, aoe, mana, coolD),
                     new Ability("Iron Skin", 14, buff, mana, coolD),
                     new Ability("Root Snare", 11, cc, mana, coolD),
 
-                    // ---- AIR ----
+                    // air
                     new Ability("Gale Slash", 17, damage, mana, coolD),
                     new Ability("Hurricane Spiral", 23, aoe, mana, coolD),
                     new Ability("Wind Shield", 14, buff, mana, coolD),
                     new Ability("Silence Gust", 10, debuff, mana, coolD),
 
-                    // ---- LIGHTNING ----
+                    // lighting
                     new Ability("Shock Bolt", 16, damage, mana, coolD),
                     new Ability("Storm Spear", 20, damage, mana, coolD),
                     new Ability("Chain Lightning", 25, aoe, mana, coolD),
                     new Ability("Static Charge", 12, debuff, mana, coolD),
 
-                    // ---- SHADOW ----
+                    // shadow
                     new Ability("Night Slash", 18, damage, mana, coolD),
                     new Ability("Umbral Nova", 24, aoe, mana, coolD),
                     new Ability("Fear Gaze", 10, cc, mana, coolD),
                     new Ability("Life Leech", 14, damage, mana, coolD),
 
-                    // ---- LIGHT ----
+                    // light
                     new Ability("Radiant Beam", 17, damage, mana, coolD),
                     new Ability("Holy Pulse", 22, aoe, mana, coolD),
                     new Ability("Blessing Aura", 14, buff, mana, coolD),
-                    new Ability("Purify", 18, cleans, mana, coolD),
+                    new Ability("Purify", 50, cleans, mana, coolD),
 
-                    // ---- ARCANE ----
+                    // arcane
                     new Ability("Arcane Missile", 16, damage, mana, coolD),
                     new Ability("Mana Rift", 20, debuff, mana, coolD),
                     new Ability("Astral Storm", 26, aoe, mana, coolD),
