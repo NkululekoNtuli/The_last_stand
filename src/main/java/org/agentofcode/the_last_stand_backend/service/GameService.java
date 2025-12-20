@@ -4,6 +4,7 @@ import io.github.cdimascio.dotenv.Dotenv;
 import okhttp3.*;
 import org.agentofcode.the_last_stand_backend.model.*;
 import org.agentofcode.the_last_stand_backend.model.Character;
+import org.agentofcode.the_last_stand_backend.repository.HeroRepository;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -14,15 +15,17 @@ import java.util.concurrent.ConcurrentHashMap;
 @Service
 public class GameService {
 
-    private Player player;
+    private Heros heros;
     private Boss boss;
     private Dotenv dotenv = Dotenv.load();
     private String AI_API_KEY = dotenv.get("AI_API_KEY");
     private String AI_API_BASE_URL = dotenv.get("AI_API_URL");
     private ConcurrentHashMap<String, GameState> gameStates = new ConcurrentHashMap<>();
+    private HeroRepository heroRepository;
 
-    public GameService() {
+    public GameService(HeroRepository heroRepository) {
         boss = new Boss("Demon General", Character.abilities, 500, 0, 600);
+        this.heroRepository = heroRepository;
     }
 
     public String promptAI() {
@@ -33,7 +36,7 @@ public class GameService {
         });
 
         String prompt = "You are the boss in this situation, choose a skill to play based on the given information";
-        String context = "This is a turn based game. player status is " + player.getCharacterInfo() +
+        String context = "This is a turn based game. player status is " + heros.getCharacterInfo() +
                 " and the boss status is " + boss.getCharacterInfo()  + "Respond only with the skill name.";
 
         OkHttpClient client = new OkHttpClient();
@@ -59,9 +62,9 @@ public class GameService {
         }
     }
 
-    public void creatGameState( String userId, Character newPlayer){
-        player = (Player) newPlayer;
-        gameStates.put(userId, new GameState(player, boss));
+    public void creatGameState( String userId, Heros heros){
+        this.heros = heros;
+        gameStates.put(userId, new GameState(this.heros, boss));
 
     }
 
@@ -70,18 +73,18 @@ public class GameService {
         return "";
     }
 
-    public Boss creatBoss(Player player){
+    public Boss creatBoss(Heros heros){
         return new Boss();
     }
 
     public void executeSkill(String userId, Ability ability){
         GameState game = gameStates.get(userId);
-        player = game.getPlayer();
+        heros = game.getPlayer();
         boss = game.getBoss();
-        player.decreaseMana(ability.getManaCost());
+        heros.decreaseMana(ability.getManaCost());
 
         if (ability.getType().equalsIgnoreCase("cleans")){
-            player.increaseHealth(ability.getPower());
+            heros.increaseHealth(ability.getPower());
         }else {
             boss.decreaseHealth(ability.getPower());
         }
@@ -118,7 +121,7 @@ public class GameService {
         ArrayList<Ability> abilities = boss.getAbilities();
         Ability  move = abilities.get(random.nextInt(abilities.size()));
         boss.setAbilityUsed(move.getName());
-        player.decreaseHealth(move.getPower());
+        heros.decreaseHealth(move.getPower());
 
     }
 

@@ -3,23 +3,22 @@ package org.agentofcode.the_last_stand_backend.model;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
-import java.util.Map;
 
 @Component
 public class GameState {
-    private Player player;
+    private Heros heros;
     private Boss boss;
 
 
     public GameState() {}
 
-    public GameState(Player player, Boss boss) {
-        this.player = player;
+    public GameState(Heros heros, Boss boss) {
+        this.heros = heros;
         this.boss = boss;
     }
 
-    public Player getPlayer() {
-        return player;
+    public Heros getPlayer() {
+        return heros;
     }
 
     public Boss getBoss() {
@@ -28,13 +27,13 @@ public class GameState {
 
     public HashMap<String, Object> getGameState(){
         HashMap<String, Object> state = new HashMap<>();
-        state.put("playerName", player.getName());
-        state.put("playerLevel", player.getLevel());
-        state.put("playerHP", player.getHealth());
-        state.put("playerMana", player.getMana());
-        state.put("playerAbilities", player.getAbilities());
-        state.put("playerMaxHP", player.getMaxHealth());
-        state.put("playerMaxMana", player.getMaxMana());
+        state.put("playerName", heros.getName());
+        state.put("playerLevel", heros.getLevel());
+        state.put("playerHP", heros.getHealth());
+        state.put("playerMana", heros.getMana());
+        state.put("playerAbilities", heros.getAbilities());
+        state.put("playerMaxHP", heros.getMaxHealth());
+        state.put("playerMaxMana", heros.getMaxMana());
         state.put("enemyName", boss.getName());
         state.put("enemyLevel", boss.getLevel());
         state.put("enemyHP", boss.getHealth());
@@ -67,7 +66,7 @@ public class GameState {
     @Override
     public String toString() {
         return "GameState{" +
-                "player=" + player.getCharacterInfo() +
+                "player=" + heros.getCharacterInfo() +
                 ", boss=" + boss.getCharacterInfo() +
                 '}';
     }
