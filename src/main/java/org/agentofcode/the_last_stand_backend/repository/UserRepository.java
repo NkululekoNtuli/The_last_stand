@@ -9,6 +9,7 @@ public interface UserRepository extends JpaRepository<Users, Integer> {
 
     Users findUsersByName(String name);
 
+
 //    Users findAllByRatingGreaterThan(int minRating);
 
 //    List<Users> findAllByRatingLessThan(int minRating);

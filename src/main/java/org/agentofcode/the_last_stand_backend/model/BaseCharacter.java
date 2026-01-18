@@ -80,6 +80,11 @@ public abstract class BaseCharacter implements Character{
     public void increaseMagicPower(int magicPower) {magicPower += magicPower;}
 
     @Override
+    public int getDamageTaken(){
+        return maxHealth - health;
+    }
+
+    @Override
     public HashMap<String, Object> getCharacterInfo() {
         return new HashMap<>(Map.ofEntries(
                 Map.entry("name", name),

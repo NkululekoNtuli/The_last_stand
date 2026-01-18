@@ -1,13 +1,11 @@
 package org.agentofcode.the_last_stand_backend.service;
 
 //import io.github.cdimascio.dotenv.Dotenv;
+import jakarta.transaction.Transactional;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.agentofcode.the_last_stand_backend.model.Users;
 import org.agentofcode.the_last_stand_backend.repository.UserRepository;
-
-import java.time.Instant;
-import java.util.List;
 
 @Service
 public class UserService {
@@ -45,9 +43,10 @@ public class UserService {
 //        return userRepository.findAllByRatingGreaterThan(rating);
 //    }
 
-//    public void updateRating(int addition, String name) {
-//        Users user = userRepository.findByUserName(name);
-//        user.setRating(addition);
-//        userRepository.save(user);
-//    }
+    @Transactional
+    public void updateRating(int addition, String name) {
+        Users user = userRepository.findUsersByName(name);
+        user.updateRating(addition);
+        userRepository.save(user);
+    }
 }

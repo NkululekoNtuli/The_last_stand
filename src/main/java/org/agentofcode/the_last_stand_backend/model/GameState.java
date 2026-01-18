@@ -6,23 +6,28 @@ import java.util.HashMap;
 
 @Component
 public class GameState {
-    private Heros heros;
+    private Hero heros;
     private Boss boss;
-
+    private String userName;
 
     public GameState() {}
 
-    public GameState(Heros heros, Boss boss) {
+    public GameState(Hero heros, Boss boss, String userName) {
         this.heros = heros;
         this.boss = boss;
+        this.userName = userName;
     }
 
-    public Heros getPlayer() {
+    public Hero getPlayer() {
         return heros;
     }
 
     public Boss getBoss() {
         return boss;
+    }
+
+    public String getUserName(){
+        return userName;
     }
 
     public HashMap<String, Object> getGameState(){
@@ -44,23 +49,6 @@ public class GameState {
         state.put("enemyMaxMana", boss.getMaxMana());
 
         return state;
-//        return HashMap.ofEntries(
-//                Map.entry("playerName", player.getName()),
-//                Map.entry("playerLevel", player.getLevel()),
-//                Map.entry("playerHP", player.getHealth()),
-//                Map.entry("playerMana", player.getMana()),
-//                Map.entry("playerAbilities", player.getAbilities()),
-//                Map.entry("playerMaxHP", player.getMaxHealth()),
-//                Map.entry("playerMaxMana", player.getMaxMana()),
-//                Map.entry("enemyName", boss.getName()),
-//                Map.entry("enemyLevel", boss.getLevel()),
-//                Map.entry("enemyHP", boss.getHealth()),
-//                Map.entry("enemyMana", boss.getMana()),
-//                Map.entry("enemyAbilities", boss.getAbilities()),
-//                Map.entry("enemyAbilityUsed", boss.getAbilityUsed()),
-//                Map.entry("enemyMaxHP", boss.getMaxHealth()),
-//                Map.entry("enemyMaxMana", boss.getMaxMana())
-//        );
     }
 
     @Override

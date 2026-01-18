@@ -5,6 +5,8 @@ import okhttp3.*;
 import org.agentofcode.the_last_stand_backend.model.*;
 import org.agentofcode.the_last_stand_backend.model.Character;
 import org.agentofcode.the_last_stand_backend.repository.HeroRepository;
+import org.agentofcode.the_last_stand_backend.repository.UserRepository;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -15,17 +17,21 @@ import java.util.concurrent.ConcurrentHashMap;
 @Service
 public class GameService {
 
-    private Heros heros;
+    private Hero hero;
     private Boss boss;
     private Dotenv dotenv = Dotenv.load();
     private String AI_API_KEY = dotenv.get("AI_API_KEY");
     private String AI_API_BASE_URL = dotenv.get("AI_API_URL");
     private ConcurrentHashMap<String, GameState> gameStates = new ConcurrentHashMap<>();
     private HeroRepository heroRepository;
+    private UserRepository userRepository;
+    private UserService userService;
+    private String userName;
 
-    public GameService(HeroRepository heroRepository) {
-        boss = new Boss("Demon General", Character.abilities, 500, 0, 600);
+    public GameService(HeroRepository heroRepository, UserService userService) {
+//        boss = new Boss("Demon General", Character.abilities, 500, 0, 600);
         this.heroRepository = heroRepository;
+        this.userService = userService;
     }
 
     public String promptAI() {
@@ -36,7 +42,7 @@ public class GameService {
         });
 
         String prompt = "You are the boss in this situation, choose a skill to play based on the given information";
-        String context = "This is a turn based game. player status is " + heros.getCharacterInfo() +
+        String context = "This is a turn based game. player status is " + hero.getCharacterInfo() +
                 " and the boss status is " + boss.getCharacterInfo()  + "Respond only with the skill name.";
 
         OkHttpClient client = new OkHttpClient();
@@ -62,56 +68,79 @@ public class GameService {
         }
     }
 
-    public void creatGameState( String userId, Heros heros){
-        this.heros = heros;
-        gameStates.put(userId, new GameState(this.heros, boss));
-
+    public void creatGameState(String userId, Hero hero, String userName){
+        this.hero = hero;
+        this.boss = creatBoss();
+        this.gameStates.put(userId, new GameState(this.hero, this.boss, userName));
     }
 
+    public Boss creatBoss(){
+        ArrayList<Ability> bossAbilities = new ArrayList<>();
+        ArrayList<Ability> abilities = this.hero.getAbilities();
 
-    public String gameIntro(){
-        return "";
-    }
+        for (Ability ability : abilities) {
+            int slot = ability.getSlot();
 
-    public Boss creatBoss(Heros heros){
-        return new Boss();
+            switch (slot){
+                case 0 -> bossAbilities.add(ability.getCounterElement());// passive
+                case 1 -> bossAbilities.add(ability.getCounterElement());// primary
+                case 2 -> bossAbilities.add(ability.getCounterElement());// secondary
+                case 3 -> bossAbilities.add(ability.getCounterElement());// tertiary
+                case 4 -> bossAbilities.add(ability.getCounterElement());// ultimate
+            }
+        }
+
+        return new Boss("Demon General", bossAbilities, 500, 0, 600);
     }
 
     public void executeSkill(String userId, Ability ability){
-        GameState game = gameStates.get(userId);
-        heros = game.getPlayer();
-        boss = game.getBoss();
-        heros.decreaseMana(ability.getManaCost());
+        GameState game = this.gameStates.get(userId);
 
-        if (ability.getType().equalsIgnoreCase("cleans")){
-            heros.increaseHealth(ability.getPower());
+        hero = game.getPlayer();
+        boss = game.getBoss();
+        hero.decreaseMana(ability.getManaCost());
+
+        if (ability.getEffect().equalsIgnoreCase("cleans")){
+            hero.increaseHealth(ability.getPower());
         }else {
             boss.decreaseHealth(ability.getPower());
         }
-
+        upgradeLevel(hero, boss);
 //        String move = promptAI();
 //        executeBossMove(move);
         executeBossMove();
+        upgradeLevel(boss, hero);
     }
 
-    public String getBossLine() {
-        return "";
-    }
+    public void upgradeLevel(Character player, Character enemy){
+        try{
+            //upgrade level
+            if (enemy.getDamageTaken() / enemy.getMaxHealth() * 100 > (enemy.getMaxHealth() / 4) / enemy.getMaxHealth() * 100) {
+                int increase = enemy.getDamageTaken() / 4;
+                player.increaseHealth(increase);
+                player.increaseMaxHealth(increase);
+                player.increaseMagicPower(increase);
+                player.increaseMaxMana(increase);
 
-    public String getSkillInfo() {
-        return "";
-    }
+            } else if (enemy.getDamageTaken() / enemy.getMaxHealth() * 100 > (enemy.getMaxHealth() / 3) / enemy.getMaxHealth() * 100) {
+                int increase = enemy.getDamageTaken() / 3;
+                player.increaseHealth(increase);
+                player.increaseMaxHealth(increase);
+                player.increaseMagicPower(increase);
+                player.increaseMaxMana(increase);
 
-    public String getOutro() {
-        return "";
-    }
+            } else if (enemy.getDamageTaken() / enemy.getMaxHealth() * 100 > (enemy.getMaxHealth() / 2) / enemy.getMaxHealth() * 100) {
+                int increase = enemy.getDamageTaken() / 3;
+                player.increaseHealth(increase);
+                player.increaseMaxHealth(increase);
+                player.increaseMagicPower(increase);
+                player.increaseMaxMana(increase);
 
-    public void upgradeLevel(Character player){
-        //upgrade level
-    }
+            }else {}//No upgrade
+        }catch(ArithmeticException e) {
+            //No damage taken
+        }
 
-    public void concede() {
-        //implement mp check
     }
 
     public void executeBossMove() {
@@ -121,36 +150,24 @@ public class GameService {
         ArrayList<Ability> abilities = boss.getAbilities();
         Ability  move = abilities.get(random.nextInt(abilities.size()));
         boss.setAbilityUsed(move.getName());
-        heros.decreaseHealth(move.getPower());
-
+        hero.decreaseHealth(move.getPower());
     }
 
     public Map<String, Object> gameState(String userId){
-//        HashMap<String, Object> state = gameStates.get(userId).getGameState();
-//        Player player = (Player) state.get("player");
-//        Boss boss = (Boss) state.get("boss");
-
-//        return Map.ofEntries(
-//                Map.entry("playerName", player.getName()),
-//                Map.entry("playerLevel", player.getLevel()),
-//                Map.entry("playerHP", player.getHealth()),
-//                Map.entry("playerMana", player.getMana()),
-//                Map.entry("playerAbilities", player.getAbilities()),
-//                Map.entry("playerMaxHP", player.getMaxHealth()),
-//                Map.entry("playerMaxMana", player.getMaxMana()),
-//                Map.entry("enemyName", boss.getName()),
-//                Map.entry("enemyLevel", boss.getLevel()),
-//                Map.entry("enemyHP", boss.getHealth()),
-//                Map.entry("enemyMana", boss.getMana()),
-//                Map.entry("enemyAbilities", boss.getAbilities()),
-//                Map.entry("enemyAbilityUsed", boss.getAbilityUsed()),
-//                Map.entry("enemyMaxHP", boss.getMaxHealth()),
-//                Map.entry("enemyMaxMana", boss.getMaxMana())
-//        );
         return gameStates.get(userId).getGameState();
     }
 
     public void endGame(String userId) {
+        GameState gameState = gameStates.get(userId);
+        gamePoints(gameState.getUserName());
         gameStates.remove(userId);
+    }
+
+    private void gamePoints(String name){
+        if (hero.getHealth() > boss.getHealth()) {
+            userService.updateRating(10, name);
+        } else {
+            userService.updateRating(2, name);
+        }
     }
 }

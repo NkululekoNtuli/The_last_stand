@@ -2,7 +2,8 @@ package org.agentofcode.the_last_stand_backend.cotroller;
 
 import org.agentofcode.the_last_stand_backend.model.Ability;
 import org.agentofcode.the_last_stand_backend.model.Character;
-import org.agentofcode.the_last_stand_backend.model.Heros;
+import org.agentofcode.the_last_stand_backend.model.Hero;
+import org.agentofcode.the_last_stand_backend.model.Users;
 import org.agentofcode.the_last_stand_backend.repository.HeroRepository;
 import org.agentofcode.the_last_stand_backend.repository.UserRepository;
 import org.agentofcode.the_last_stand_backend.service.GameService;
@@ -50,9 +51,11 @@ public class GameController {
 
     @PostMapping(value = "/start_game")
     public ResponseEntity<?> startGame(@RequestBody Map<String, Object> data, @AuthenticationPrincipal String userId) {
-        String heroName = data.get("name").toString();
-        Heros heros = heroRepository.findHeroByName(heroName);
-        gameService.creatGameState(userId, heros);
+        String heroName = data.get("heroName").toString();
+        String userName = data.get("userName").toString();
+        Users user = userRepository.findUsersByName(userName);
+        Hero hero = heroRepository.findHeroesByUserIdAndName((Long) user.getId(), heroName);
+        gameService.creatGameState(userId, hero, userName);
         return ResponseEntity.ok(gameService.gameState(userId));
     }
 
@@ -67,10 +70,11 @@ public class GameController {
         abilitiesNames.forEach(a -> {abilities.add(Character.abiltityMap.get(a));});
 
         long playerId = userRepository.findUsersByName(userName).getId();
-        Character hero = new Heros(heroName, abilities, 300, 0, 150, 0, 0, playerId);
-        heroRepository.save((Heros) hero);
+        Character hero = new Hero(heroName, abilities, 300, 0, 150, 0, 0, playerId);
+        System.out.println("HELLO");
+        heroRepository.save((Hero) hero);
         System.out.println("hero saved");
-        return ResponseEntity.ok("Hero saved");
+        return ResponseEntity.ok(HttpEntity.EMPTY);
     }
 
 

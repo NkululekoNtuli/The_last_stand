@@ -1,17 +1,16 @@
 package org.agentofcode.the_last_stand_backend.cotroller;
 
 import org.agentofcode.the_last_stand_backend.model.Character;
+import org.agentofcode.the_last_stand_backend.model.Hero;
 import org.agentofcode.the_last_stand_backend.repository.UserRepository;
+import org.agentofcode.the_last_stand_backend.service.HeroService;
 import org.agentofcode.the_last_stand_backend.service.JwtService;
-import org.hibernate.NonUniqueResultException;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.agentofcode.the_last_stand_backend.model.Users;
 import org.agentofcode.the_last_stand_backend.service.UserService;
-import org.sqlite.SQLiteException;
 
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -23,10 +22,12 @@ public class UserController {
     private UserRepository userRepository;
     private UserService userService;
     private JwtService jwtService;
+    private HeroService heroService;
 
-    public UserController(UserService userService, UserRepository userRepository, JwtService jwtService) {
+    public UserController(UserService userService, UserRepository userRepository, JwtService jwtService, HeroService heroService) {
         this.userService = userService;
         this.userRepository = userRepository;
+        this.heroService = heroService;
         this.jwtService = jwtService;
     }
 
@@ -49,17 +50,23 @@ public class UserController {
         String userName = data.get("name");
         String password = data.get("password");
 
-//        String token = null;
         try{
             userService.registerUser(userName, password);
-            Users validUser = userService.getUserByName(userName);
-//            token = jwtService.generateToken(validUser.getUserName());
-            System.out.println("hello");
-//            return  ResponseEntity.ok(Map.of("token", token, "name",data.get("name")));
             return  ResponseEntity.ok(Map.of( "name",data.get("name")));
         }catch (Exception e){
-            System.out.println("hello2");
             return ResponseEntity.status(401).body(Map.of("error", "UserName Already Taken!"));//ResponseEntity.ok(Map.of("result", "Username taken"));
         }
+    }
+
+    @PostMapping(value = "/heroes")
+    public ResponseEntity<?> getUserHeroes(@RequestBody Map<String, String> data){
+        String userName = data.get("ability");
+        List<Hero> heroes = heroService.getHeroes(userService.getUserByName(userName).getId());
+        System.out.println("num of hero: " + heroes.size());
+
+        for (Hero hero : heroes){
+            System.out.println("Hero: " + hero.toString() + "/n");
+        }
+        return ResponseEntity.ok(Map.of("heroes", heroService.getHeroes(userService.getUserByName(userName).getId())));
     }
 }

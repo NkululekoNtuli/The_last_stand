@@ -14,7 +14,7 @@ public class Users {
     private String name;
     @JsonIgnore
     private String password; // remember to hash password in db
-//    private int rating;
+    private int rating = 0;
 //    private Instant created;
 
     public Users() {}
@@ -22,33 +22,48 @@ public class Users {
     public Users(String name, String password) {
         this.name = name;
         this.password = password;
-//        this.rating = rating;
+//        this.rating = 0;
 //        this.created = created;
     }
 
     public Long getId() {
-        return id;
+        return this.id;
     }
 
     public String getUserName() {
-        return name;
+        return this.name;
+    }
+
+
+    public void updateRating(int rating) {
+        this.rating += rating;
+    }
+
+    public String getPassword() {
+        return this.password;
+    }
+
+    public int getRating() {
+        return this.rating;
+    }
+
+    @Override
+    public String toString() {
+        return "Users{" +
+                "id=" + this.id +
+                ", userName='" + this.name + '\'' +
+                ", password='" + this.password + '\'' +
+                '}';
     }
 
 //    public void setUserName(String userName) {
 //        this.name = userName;
 //    }
 
-    public String getPassword() {
-        return password;
-    }
-
 //    public void setPassword(String password) {
 //        this.password = password;
 //    }
 
-//    public int getRating() {
-//        return rating;
-//    }
 
 //    public void setRating(int rating) {
 //        this.rating += rating;
@@ -61,14 +76,4 @@ public class Users {
 //    public void setCreated(Instant created) {
 //        this.created = created;
 //    }
-
-
-    @Override
-    public String toString() {
-        return "Users{" +
-                "id=" + id +
-                ", userName='" + name + '\'' +
-                ", password='" + password + '\'' +
-                '}';
-    }
 }
