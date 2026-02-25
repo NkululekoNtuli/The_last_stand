@@ -4,7 +4,8 @@ import jakarta.persistence.*;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 @Entity
@@ -23,9 +24,11 @@ public class Hero extends BaseCharacter {
     private int mana;
     private int wins;
     private int loses;
+//    private int level;
+//    private int maxHealth;
+//    private int maxMana;
     @Column(nullable = false, name = "user_id")
     private Long userId;
-//    private ArrayList<Ability> abilities = new ArrayList<>();
 
 
     public void setId(Long id) {
@@ -46,6 +49,9 @@ public class Hero extends BaseCharacter {
         this.userId = userId;
         this.wins = wins;
         this.loses = loses;
+//        this.level = level;
+//        this.maxHealth = health;
+//        this.maxMana = mana;
 
         for (Ability ability : abilities) {
             switch (ability.getSlot()){
@@ -58,17 +64,6 @@ public class Hero extends BaseCharacter {
         }
     }
 
-//    @Override
-    public ArrayList<Ability> getAbilities() {
-        ArrayList<Ability> abilities = new ArrayList<>();
-        abilities.add(Character.abiltityMap.get(passiveAbility));
-        abilities.add(Character.abiltityMap.get(primaryAbility));
-        abilities.add(Character.abiltityMap.get(secondaryAbility));
-        abilities.add(Character.abiltityMap.get(tertiaryAbility));
-        abilities.add(Character.abiltityMap.get(ultimateAbility));
-
-        return abilities;
-    }
 
     @Override
     public String toString() {
@@ -82,5 +77,74 @@ public class Hero extends BaseCharacter {
                 ", health=" + health +
                 ", mana=" + mana +
                 '}';
+    }
+
+
+//    @Override
+//    public int getMaxMana() {
+//        return maxMana;
+//    }
+
+//    @Override
+//    public void increaseMaxMana(int maxMana) {
+//        this.maxMana = maxMana;
+//    }
+
+    @Override
+    public int getHealth() {return this.health;}
+
+//    @Override
+//    public int getLevel() {return level;}
+
+    @Override
+    public int getMana() {return this.mana;}
+
+    @Override
+    public String getName() {return name;}
+
+    @Override
+    public ArrayList<Ability> getAbilities() {
+        ArrayList<Ability> abilities = new ArrayList<>();
+        abilities.add(Character.abiltityMap.get(passiveAbility));
+        abilities.add(Character.abiltityMap.get(primaryAbility));
+        abilities.add(Character.abiltityMap.get(secondaryAbility));
+        abilities.add(Character.abiltityMap.get(tertiaryAbility));
+        abilities.add(Character.abiltityMap.get(ultimateAbility));
+
+        return abilities;
+    }
+
+    @Override
+    public void decreaseHealth(int damage) {this.health -= damage;}
+
+    @Override
+    public void decreaseMana(int magicPower) {this.mana -= magicPower;}
+
+    @Override
+    public void increaseHealth(int health) { this.health += health;}
+
+    @Override
+    public void increaseMagicPower(int magicPower) {magicPower += magicPower;}
+
+//    @Override
+//    public int getDamageTaken(){
+//        return maxHealth - health;
+//    }
+
+
+    public Map<String, Object> getHeroInfo() {
+        Map<String, Object> map = new HashMap<>();
+
+        map.put("name", name);
+        map.put("passiveAbility", passiveAbility);
+        map.put("primaryAbility", primaryAbility);
+        map.put("secondaryAbility", secondaryAbility);
+        map.put("tertiaryAbility", tertiaryAbility);
+        map.put("ultimateAbility", ultimateAbility);
+        map.put("health", health);
+        map.put("mana", mana);
+        map.put("wins", wins);
+        map.put("loses", loses);
+        return map;
     }
 }

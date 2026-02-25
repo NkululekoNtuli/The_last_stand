@@ -29,7 +29,6 @@ public class GameService {
     private String userName;
 
     public GameService(HeroRepository heroRepository, UserService userService) {
-//        boss = new Boss("Demon General", Character.abilities, 500, 0, 600);
         this.heroRepository = heroRepository;
         this.userService = userService;
     }
@@ -98,18 +97,21 @@ public class GameService {
 
         hero = game.getPlayer();
         boss = game.getBoss();
-        hero.decreaseMana(ability.getManaCost());
+        System.out.println("checking her info: "+ hero.getHeroInfo());
+//        System.out.println("checking hero info from base " + hero.getCharacterInfo());
+        game.updateMana(ability.getManaCost(), 0);
 
         if (ability.getEffect().equalsIgnoreCase("cleans")){
-            hero.increaseHealth(ability.getPower());
+            game.updateHealth(-ability.getPower(), 0);
         }else {
-            boss.decreaseHealth(ability.getPower());
+            game.updateHealth(ability.getPower(), 1);
         }
-        upgradeLevel(hero, boss);
+//        upgradeLevel(hero, boss);
 //        String move = promptAI();
 //        executeBossMove(move);
-        executeBossMove();
-        upgradeLevel(boss, hero);
+        executeBossMove(game);
+//        upgradeLevel(boss, hero);
+//        game.updateGameState(hero, boss);
     }
 
     public void upgradeLevel(Character player, Character enemy){
@@ -138,19 +140,19 @@ public class GameService {
 
             }else {}//No upgrade
         }catch(ArithmeticException e) {
-            //No damage taken
+            //No damage taken 
         }
 
     }
 
-    public void executeBossMove() {
+    public void executeBossMove(GameState game) {
         //implement boss logic
         Random random = new Random();
 
         ArrayList<Ability> abilities = boss.getAbilities();
         Ability  move = abilities.get(random.nextInt(abilities.size()));
         boss.setAbilityUsed(move.getName());
-        hero.decreaseHealth(move.getPower());
+        game.updateHealth(move.getPower(), 0);
     }
 
     public Map<String, Object> gameState(String userId){

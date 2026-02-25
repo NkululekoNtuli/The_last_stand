@@ -23,15 +23,12 @@ public class UserService {
     public void registerUser(String name, String password) {
         String hashedPassword = passwordEncoder.encode(password);
         Users user = new Users(name, hashedPassword);
-        System.out.println("user name is :u"+user.getUserName() + " and password is :" + user.getPassword());
         userRepository.save(user);
     }
 
     public boolean isValidUser(String name, String password) {
         Users user = userRepository.findUsersByName(name);
-//        System.out.println(user.getUserName());
         if (user == null) {
-            System.out.println("....");
             return false;
         }
         return passwordEncoder.matches(password, user.getPassword());
@@ -48,5 +45,9 @@ public class UserService {
         Users user = userRepository.findUsersByName(name);
         user.updateRating(addition);
         userRepository.save(user);
+    }
+
+    public void logout(String username) {
+
     }
 }

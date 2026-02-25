@@ -34,33 +34,18 @@ public class GameController {
         this.userRepository = userRepository;
     }
 
-//    @PostMapping(value = "/character/creation")
-//    public ResponseEntity<?> creatCharacter(@RequestBody Map<String, Object> data, @AuthenticationPrincipal String userId) {
-//        String name = data.get("name").toString();
-//        ArrayList<String> abilitiesNames = (ArrayList<String>) data.get("abilities");
-//
-//        ArrayList<Ability>  abilities = new ArrayList<>();
-//        abilitiesNames.forEach(a -> {abilities.add(Character.abiltityMap.get(a));});
-//
-//        Character playerCharacter = new Hero(name, abilities, 300, 0, 150, 0, 0);
-//        gameService.creatGameState(userId, heroRepository.findHeroByName(name));
-//
-//        return ResponseEntity.ok(gameService.gameState(userId));
-//
-//    }
-
-    @PostMapping(value = "/start_game")
+    @PostMapping(value = "/start-game")
     public ResponseEntity<?> startGame(@RequestBody Map<String, Object> data, @AuthenticationPrincipal String userId) {
         String heroName = data.get("heroName").toString();
         String userName = data.get("userName").toString();
         Users user = userRepository.findUsersByName(userName);
-        Hero hero = heroRepository.findHeroesByUserIdAndName((Long) user.getId(), heroName);
+        Hero hero = heroRepository.findHeroesByUserIdAndName(user.getId(), heroName);
         gameService.creatGameState(userId, hero, userName);
         return ResponseEntity.ok(gameService.gameState(userId));
     }
 
 
-    @PostMapping(value = "/save_hero")
+    @PostMapping(value = "/save-hero")
     public ResponseEntity<?> saveHero(@RequestBody Map<String, Object> data, @AuthenticationPrincipal String userId) {
         String userName = data.get("username").toString();
         String heroName = data.get("heroName").toString();
@@ -71,22 +56,20 @@ public class GameController {
 
         long playerId = userRepository.findUsersByName(userName).getId();
         Character hero = new Hero(heroName, abilities, 300, 0, 150, 0, 0, playerId);
-        System.out.println("HELLO");
         heroRepository.save((Hero) hero);
-        System.out.println("hero saved");
         return ResponseEntity.ok(HttpEntity.EMPTY);
     }
 
 
 
-    @PostMapping(value = "/game")
+    @PostMapping(value = "/in-game")
     public ResponseEntity<?> executeAction(@RequestBody Map<String, Object> data, @AuthenticationPrincipal String userId ) {
         String abilityName = data.get("ability").toString();
         gameService.executeSkill(userId, Character.abiltityMap.get(abilityName));
         return ResponseEntity.ok(gameService.gameState(userId));
     }
 
-    @PostMapping(value = "/endGame")
+    @GetMapping(value = "/end-game")
     public ResponseEntity<?> endGame(@RequestBody Map<String, Object> data, @AuthenticationPrincipal String userId) {
         gameService.endGame(userId);
         return ResponseEntity.ok(HttpEntity.EMPTY);

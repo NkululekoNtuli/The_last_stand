@@ -6,10 +6,12 @@ import org.agentofcode.the_last_stand_backend.repository.UserRepository;
 import org.agentofcode.the_last_stand_backend.service.HeroService;
 import org.agentofcode.the_last_stand_backend.service.JwtService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.agentofcode.the_last_stand_backend.model.Users;
 import org.agentofcode.the_last_stand_backend.service.UserService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -58,15 +60,20 @@ public class UserController {
         }
     }
 
+    @PostMapping(value = "/logout")
+    public ResponseEntity<?> logout(@AuthenticationPrincipal String user ) {
+        return ResponseEntity.ok().build();
+    }
+
     @PostMapping(value = "/heroes")
     public ResponseEntity<?> getUserHeroes(@RequestBody Map<String, String> data){
-        String userName = data.get("ability");
+        String userName = data.get("userName");
         List<Hero> heroes = heroService.getHeroes(userService.getUserByName(userName).getId());
-        System.out.println("num of hero: " + heroes.size());
+        List<Map> heroInfo = new ArrayList<>();
 
-        for (Hero hero : heroes){
-            System.out.println("Hero: " + hero.toString() + "/n");
-        }
-        return ResponseEntity.ok(Map.of("heroes", heroService.getHeroes(userService.getUserByName(userName).getId())));
+        heroes.forEach(hero -> heroInfo.add(hero.getHeroInfo()));
+        return ResponseEntity.ok(Map.of("heroes", heroInfo));
     }
+
+
 }

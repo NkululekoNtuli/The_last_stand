@@ -56,9 +56,9 @@ public class SecurityConfig {
                         "/the-last-stand/login",
                         "/the-last-stand/character/creation",
                         "/endGame",
-                        "/the-last-stand/save_hero",
-                        "/the-last-stand/game",
-                        "/the-last-stand/start_game",
+                        "/the-last-stand/save-hero",
+                        "/the-last-stand/in-game",
+                        "/the-last-stand/start-game",
                         "/the-last-stand/heroes"
                 ).permitAll()
                 .anyRequest().authenticated()

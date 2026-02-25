@@ -59,7 +59,7 @@ public abstract class BaseCharacter implements Character{
     public int getLevel() {return level;}
 
     @Override
-    public int getMana() {return mana;}
+    public int getMana() {return this.mana;}
 
     @Override
     public String getName() {return name;}
