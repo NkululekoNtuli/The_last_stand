@@ -28,6 +28,7 @@ public class GameState {
         this.bossCurrHp = boss.getHealth();
         this.bossCurrMana = boss.getMana();
         this.userName = userName;
+        this.heroCurrLv = hero.getLevel();
     }
 
     public Hero getPlayer() {
@@ -73,6 +74,7 @@ public class GameState {
     }
 
     public void updateHealth(int hp, int target) {
+        System.out.println("testing health");
         if (target == 0) this.heroCurrHp -= hp;
         else this.bossCurrHp -= hp;
     }
@@ -93,7 +95,7 @@ public class GameState {
     public HashMap<String, Object> getGameState(){
         HashMap<String, Object> state = new HashMap<>();
         state.put("playerName", this.hero.getName());
-        state.put("playerLevel", heroCurrLv);
+        state.put("playerLevel", this.hero.getLevel());
         state.put("playerHP", heroCurrHp);
         state.put("playerMana", this.heroCurrMana);
         state.put("playerAbilities", this.hero.getAbilities());

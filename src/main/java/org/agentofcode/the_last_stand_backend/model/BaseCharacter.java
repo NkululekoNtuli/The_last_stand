@@ -52,6 +52,10 @@ public abstract class BaseCharacter implements Character{
         this.maxMana = maxMana;
     }
 
+    public void increaseLevel (int lv){
+        level = lv;
+    }
+
     @Override
     public int getHealth() {return this.health;}
 
@@ -81,6 +85,8 @@ public abstract class BaseCharacter implements Character{
 
     @Override
     public int getDamageTaken(){
+        System.out.println("maxHP "+ maxHealth + " and " + health);
+        System.out.println("dmg" + (maxHealth - health));
         return maxHealth - health;
     }
 

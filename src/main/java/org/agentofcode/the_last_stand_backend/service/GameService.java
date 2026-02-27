@@ -105,6 +105,7 @@ public class GameService {
             game.updateHealth(-ability.getPower(), 0);
         }else {
             game.updateHealth(ability.getPower(), 1);
+            boss.decreaseHealth(ability.getPower());
         }
         upgradeLevel(hero, boss);
 //        String move = promptAI();
@@ -114,7 +115,7 @@ public class GameService {
         game.updateGameState(hero, boss);
     }
 
-    public void upgradeLevel(Character player, Character enemy) {
+    public void upgradeLevel(BaseCharacter player, BaseCharacter enemy) {
         System.out.println("testing upgrade");
 
         try {
@@ -127,6 +128,7 @@ public class GameService {
                 player.increaseMaxHealth(increase);
                 player.increaseMagicPower(increase);
                 player.increaseMaxMana(increase);
+                player.increaseLevel(3);
             } else if (damagePercent > (100.0 / 3)) { // >33% damage
                 System.out.println("testing level 2");
                 int increase = enemy.getDamageTaken() / 3;
@@ -134,6 +136,7 @@ public class GameService {
                 player.increaseMaxHealth(increase);
                 player.increaseMagicPower(increase);
                 player.increaseMaxMana(increase);
+                player.increaseLevel(2);
             } else if (damagePercent > (100.0 / 7)) { // >14% damage
                 System.out.println("testing level 1");
                 int increase = enemy.getDamageTaken() / 4;
@@ -141,8 +144,10 @@ public class GameService {
                 player.increaseMaxHealth(increase);
                 player.increaseMagicPower(increase);
                 player.increaseMaxMana(increase);
+                player.increaseLevel(1);
             } else {
-                System.out.println("No upgrade");
+                System.out.println(enemy.getDamageTaken());
+                System.out.println("No upgrade coz + " + damagePercent);
             }
 
         } catch (ArithmeticException e) {
