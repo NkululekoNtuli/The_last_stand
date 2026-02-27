@@ -106,43 +106,49 @@ public class GameService {
         }else {
             game.updateHealth(ability.getPower(), 1);
         }
-//        upgradeLevel(hero, boss);
+        upgradeLevel(hero, boss);
 //        String move = promptAI();
 //        executeBossMove(move);
         executeBossMove(game);
 //        upgradeLevel(boss, hero);
-//        game.updateGameState(hero, boss);
+        game.updateGameState(hero, boss);
     }
 
-    public void upgradeLevel(Character player, Character enemy){
-        try{
-            //upgrade level
-            if (enemy.getDamageTaken() / enemy.getMaxHealth() * 100 > (enemy.getMaxHealth() / 4) / enemy.getMaxHealth() * 100) {
+    public void upgradeLevel(Character player, Character enemy) {
+        System.out.println("testing upgrade");
+
+        try {
+            double damagePercent = ((double) enemy.getDamageTaken() / enemy.getMaxHealth()) * 100;
+
+            if (damagePercent > (100.0 / 2)) { // >50% damage
+                System.out.println("testing level 3");
+                int increase = enemy.getDamageTaken() / 2;
+                player.increaseHealth(increase);
+                player.increaseMaxHealth(increase);
+                player.increaseMagicPower(increase);
+                player.increaseMaxMana(increase);
+            } else if (damagePercent > (100.0 / 3)) { // >33% damage
+                System.out.println("testing level 2");
+                int increase = enemy.getDamageTaken() / 3;
+                player.increaseHealth(increase);
+                player.increaseMaxHealth(increase);
+                player.increaseMagicPower(increase);
+                player.increaseMaxMana(increase);
+            } else if (damagePercent > (100.0 / 7)) { // >14% damage
+                System.out.println("testing level 1");
                 int increase = enemy.getDamageTaken() / 4;
                 player.increaseHealth(increase);
                 player.increaseMaxHealth(increase);
                 player.increaseMagicPower(increase);
                 player.increaseMaxMana(increase);
+            } else {
+                System.out.println("No upgrade");
+            }
 
-            } else if (enemy.getDamageTaken() / enemy.getMaxHealth() * 100 > (enemy.getMaxHealth() / 3) / enemy.getMaxHealth() * 100) {
-                int increase = enemy.getDamageTaken() / 3;
-                player.increaseHealth(increase);
-                player.increaseMaxHealth(increase);
-                player.increaseMagicPower(increase);
-                player.increaseMaxMana(increase);
-
-            } else if (enemy.getDamageTaken() / enemy.getMaxHealth() * 100 > (enemy.getMaxHealth() / 2) / enemy.getMaxHealth() * 100) {
-                int increase = enemy.getDamageTaken() / 3;
-                player.increaseHealth(increase);
-                player.increaseMaxHealth(increase);
-                player.increaseMagicPower(increase);
-                player.increaseMaxMana(increase);
-
-            }else {}//No upgrade
-        }catch(ArithmeticException e) {
-            //No damage taken 
+        } catch (ArithmeticException e) {
+            // enemy.getMaxHealth() was 0
+            System.out.println("No damage taken or enemy has zero max health.");
         }
-
     }
 
     public void executeBossMove(GameState game) {
