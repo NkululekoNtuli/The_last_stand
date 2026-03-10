@@ -1,10 +1,13 @@
 package org.agentofcode.the_last_stand_backend.model;
 
+import org.springframework.stereotype.Component;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class BaseCharacter implements Character{
+@Component
+public class BaseCharacter implements Character{
 
     private String name;
     private int health;
@@ -39,7 +42,7 @@ public abstract class BaseCharacter implements Character{
 
     @Override
     public void increaseMaxHealth(int maxHealth) {
-        this.maxHealth = maxHealth;
+        this.maxHealth += maxHealth;
     }
 
     @Override
@@ -49,11 +52,12 @@ public abstract class BaseCharacter implements Character{
 
     @Override
     public void increaseMaxMana(int maxMana) {
-        this.maxMana = maxMana;
+        this.maxMana += maxMana;
     }
 
-    public void increaseLevel (int lv){
+    public void increaseLevel (int lv, int amt){
         level = lv;
+
     }
 
     @Override
@@ -78,15 +82,28 @@ public abstract class BaseCharacter implements Character{
     public void decreaseMana(int magicPower) {this.mana -= magicPower;}
 
     @Override
-    public void increaseHealth(int health) { this.health += health;}
+    public void increaseHealth(int health) {
+        int tempHP = this.health + health;
+        if (tempHP > maxHealth) {
+        this.health = this.maxHealth;
+        } else {
+            this.health += health;
+        }
+    }
 
     @Override
-    public void increaseMagicPower(int magicPower) {magicPower += magicPower;}
+    public void increaseMagicPower(int magicPower) {
+        int tempMana = this.mana + magicPower;
+
+        if (tempMana > maxHealth) {
+            this.mana = maxMana;
+        } else {
+            this.mana += magicPower;
+        }
+    }
 
     @Override
     public int getDamageTaken(){
-        System.out.println("maxHP "+ maxHealth + " and " + health);
-        System.out.println("dmg" + (maxHealth - health));
         return maxHealth - health;
     }
 

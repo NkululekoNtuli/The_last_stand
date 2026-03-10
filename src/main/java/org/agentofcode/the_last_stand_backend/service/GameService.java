@@ -17,14 +17,14 @@ import java.util.concurrent.ConcurrentHashMap;
 @Service
 public class GameService {
 
-    private Hero hero;
+    private BaseCharacter hero;
     private Boss boss;
     private Dotenv dotenv = Dotenv.load();
     private String AI_API_KEY = dotenv.get("AI_API_KEY");
     private String AI_API_BASE_URL = dotenv.get("AI_API_URL");
     private ConcurrentHashMap<String, GameState> gameStates = new ConcurrentHashMap<>();
     private HeroRepository heroRepository;
-    private UserRepository userRepository;
+//    private UserRepository userRepository;
     private UserService userService;
     private String userName;
 
@@ -68,14 +68,14 @@ public class GameService {
     }
 
     public void creatGameState(String userId, Hero hero, String userName){
-        this.hero = hero;
-        this.boss = creatBoss();
-        this.gameStates.put(userId, new GameState(this.hero, this.boss, userName));
+//        this.hero = hero;
+        this.boss = creatBoss(hero);
+        this.gameStates.put(userId, new GameState(hero, this.boss, userName));
     }
 
-    public Boss creatBoss(){
+    public Boss creatBoss(Hero hero){
         ArrayList<Ability> bossAbilities = new ArrayList<>();
-        ArrayList<Ability> abilities = this.hero.getAbilities();
+        ArrayList<Ability> abilities = hero.getAbilities();
 
         for (Ability ability : abilities) {
             int slot = ability.getSlot();
@@ -97,54 +97,50 @@ public class GameService {
 
         hero = game.getPlayer();
         boss = game.getBoss();
-        System.out.println("checking her info: "+ hero.getHeroInfo());
-//        System.out.println("checking hero info from base " + hero.getCharacterInfo());
-        game.updateMana(ability.getManaCost(), 0);
+        hero.decreaseMana(ability.getManaCost());
 
         if (ability.getEffect().equalsIgnoreCase("cleans")){
-            game.updateHealth(-ability.getPower(), 0);
+            hero.increaseHealth(-ability.getPower());
         }else {
-            game.updateHealth(ability.getPower(), 1);
             boss.decreaseHealth(ability.getPower());
         }
         upgradeLevel(hero, boss);
-//        String move = promptAI();
-//        executeBossMove(move);
         executeBossMove(game);
-//        upgradeLevel(boss, hero);
         game.updateGameState(hero, boss);
     }
 
     public void upgradeLevel(BaseCharacter player, BaseCharacter enemy) {
-        System.out.println("testing upgrade");
 
         try {
             double damagePercent = ((double) enemy.getDamageTaken() / enemy.getMaxHealth()) * 100;
 
-            if (damagePercent > (100.0 / 2)) { // >50% damage
+
+            //Refine later
+            if (damagePercent > (100.0 / 2) && player.getLevel() == 2) { // >50% damage
                 System.out.println("testing level 3");
                 int increase = enemy.getDamageTaken() / 2;
                 player.increaseHealth(increase);
                 player.increaseMaxHealth(increase);
                 player.increaseMagicPower(increase);
                 player.increaseMaxMana(increase);
-                player.increaseLevel(3);
-            } else if (damagePercent > (100.0 / 3)) { // >33% damage
+                player.increaseLevel(3, increase);
+            } else if (damagePercent > (100.0 / 3) && player.getLevel() == 1) { // >33% damage
                 System.out.println("testing level 2");
                 int increase = enemy.getDamageTaken() / 3;
                 player.increaseHealth(increase);
                 player.increaseMaxHealth(increase);
                 player.increaseMagicPower(increase);
                 player.increaseMaxMana(increase);
-                player.increaseLevel(2);
-            } else if (damagePercent > (100.0 / 7)) { // >14% damage
+                player.increaseLevel(2, increase);
+            } else if (damagePercent > (100.0 / 7) && player.getLevel() == 0) { // >14% damage
                 System.out.println("testing level 1");
                 int increase = enemy.getDamageTaken() / 4;
+                System.out.println("increase is: " + increase);
                 player.increaseHealth(increase);
                 player.increaseMaxHealth(increase);
-                player.increaseMagicPower(increase);
+                player.increaseMagicPower(increase / 2);
                 player.increaseMaxMana(increase);
-                player.increaseLevel(1);
+                player.increaseLevel(1, increase);
             } else {
                 System.out.println(enemy.getDamageTaken());
                 System.out.println("No upgrade coz + " + damagePercent);
@@ -163,7 +159,7 @@ public class GameService {
         ArrayList<Ability> abilities = boss.getAbilities();
         Ability  move = abilities.get(random.nextInt(abilities.size()));
         boss.setAbilityUsed(move.getName());
-        game.updateHealth(move.getPower(), 0);
+        hero.decreaseHealth(move.getPower());
     }
 
     public Map<String, Object> gameState(String userId){

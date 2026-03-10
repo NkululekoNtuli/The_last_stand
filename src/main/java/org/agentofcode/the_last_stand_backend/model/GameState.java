@@ -8,13 +8,9 @@ import java.util.HashMap;
 public class GameState {
     private String userName;
     private Hero hero;
-    private int heroCurrHp;
-    private int heroCurrMana;
-    private int heroCurrLv = 0;
+    private BaseCharacter hero2;
+//    private int heroCurrLv = 0;
     private Boss boss;
-    private int bossCurrHp;
-    private int bossCurrMana;
-    private int bossCurrLv = 0;
     private int MAX_LV = 3;
 
 
@@ -22,17 +18,15 @@ public class GameState {
 
     public GameState(Hero hero, Boss boss, String userName) {
         this.hero = hero;
-        this.heroCurrHp = hero.getHealth();
-        this.heroCurrMana = hero.getMana();
+        this.hero2 = new BaseCharacter(hero.getName(), hero.getAbilities(), hero.getHealth(), hero.getLevel(),
+                hero.getMana());
         this.boss = boss;
-        this.bossCurrHp = boss.getHealth();
-        this.bossCurrMana = boss.getMana();
         this.userName = userName;
-        this.heroCurrLv = hero.getLevel();
+//        this.heroCurrLv = hero.getLevel();
     }
 
-    public Hero getPlayer() {
-        return hero;
+    public BaseCharacter getPlayer() {
+        return hero2;
     }
 
     public Boss getBoss() {
@@ -43,73 +37,71 @@ public class GameState {
         return userName;
     }
 
+//
+//    public int getHeroCurrHp() {
+//        return heroCurrHp;
+//    }
+//
+//    public int getHeroCurrMana() {
+//        return heroCurrMana;
+//    }
 
-    public int getHeroCurrHp() {
-        return heroCurrHp;
-    }
+//    public int getHeroCurrLV() {
+//        return heroCurrLv;
+//    }
 
-    public int getHeroCurrMana() {
-        return heroCurrMana;
-    }
+//    public int getBossCurrHP() {
+//        return bossCurrHp;
+//    }
 
-    public int getHeroCurrLV() {
-        return heroCurrLv;
-    }
+//    public int getBossCurrMana() {
+//        return bossCurrMana;
+//    }
 
-    public int getBossCurrHP() {
-        return bossCurrHp;
-    }
+//    public int getBossCurrLV() {
+//        return bossCurrLv;
+//    }
 
-    public int getBossCurrMana() {
-        return bossCurrMana;
-    }
+//    public void updateMana(int mana, int target) {
+//        if (target == 0) this.heroCurrMana -= mana;
+//
+//    }
 
-    public int getBossCurrLV() {
-        return bossCurrLv;
-    }
+//    public void updateHealth(int hp, int target) {
+//        if (target == 0) this.heroCurrHp -= hp;
+//        else this.boss.decreaseHealth(hp);
+//    }
 
-    public void updateMana(int mana, int target) {
-        if (target == 0) this.heroCurrMana -= mana;
-        else this.bossCurrMana -= mana;
-    }
-
-    public void updateHealth(int hp, int target) {
-        System.out.println("testing health");
-        if (target == 0) this.heroCurrHp -= hp;
-        else this.bossCurrHp -= hp;
-    }
-
-    public void updateLevel(int lv, int target) {
-        if (target == 0 && heroCurrLv < 4) {
-            this.heroCurrLv += lv;
-        }
-
-        if(target == 1 && bossCurrLv < 4) {
-            this.bossCurrLv += lv;
-        }
-    }
+//    public void updateLevel(int lv, int target) {
+//        if (target == 0 && heroCurrLv < 4) {
+//            this.heroCurrLv += lv;
+//        }
+//
+//        if(target == 1 && bossCurrLv < 4) {
+//            this.bossCurrLv += lv;
+//        }
+//    }
 
 
 
 
     public HashMap<String, Object> getGameState(){
         HashMap<String, Object> state = new HashMap<>();
-        state.put("playerName", this.hero.getName());
-        state.put("playerLevel", this.hero.getLevel());
-        state.put("playerHP", heroCurrHp);
-        state.put("playerMana", this.heroCurrMana);
-        state.put("playerAbilities", this.hero.getAbilities());
-        state.put("playerMaxHP", this.hero.getHealth());
-        state.put("playerMaxMana", this.hero.getMana());
+        state.put("playerName", this.hero2.getName());
+        state.put("playerLevel", this.hero2.getLevel());
+        state.put("playerHP", this.hero2.getHealth());
+        state.put("playerMana", this.hero2.getMana());
+        state.put("playerAbilities", this.hero2.getAbilities());
+        state.put("playerMaxHP", this.hero2.getMaxHealth());
+        state.put("playerMaxMana", this.hero2.getMaxMana());
         state.put("enemyName", this.boss.getName());
-        state.put("enemyLevel", bossCurrLv);
-        state.put("enemyHP", bossCurrHp);
-        state.put("enemyMana", bossCurrMana);
+        state.put("enemyLevel", this.boss.getLevel());
+        state.put("enemyHP", this.boss.getHealth());
+        state.put("enemyMana", this.boss.getMana());
         state.put("enemyAbilities", this.boss.getAbilities());
         state.put("enemyAbilityUsed", this.boss.getAbilityUsed());
-        state.put("enemyMaxHP", this.boss.getHealth());
-        state.put("enemyMaxMana", this.boss.getMana());
-
+        state.put("enemyMaxHP", this.boss.getMaxHealth());
+        state.put("enemyMaxMana", this.boss.getMaxMana());
         return state;
     }
 
@@ -121,8 +113,8 @@ public class GameState {
                 '}';
     }
 
-    public void updateGameState(Hero hero, Boss boss) {
-        this.hero = hero;
+    public void updateGameState(BaseCharacter hero, Boss boss) {
+        this.hero2 = hero;
         this.boss = boss;
     }
 }
