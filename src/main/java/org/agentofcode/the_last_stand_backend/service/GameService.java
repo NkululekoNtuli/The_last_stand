@@ -24,7 +24,6 @@ public class GameService {
     private String AI_API_BASE_URL = dotenv.get("AI_API_URL");
     private ConcurrentHashMap<String, GameState> gameStates = new ConcurrentHashMap<>();
     private HeroRepository heroRepository;
-//    private UserRepository userRepository;
     private UserService userService;
     private String userName;
 
@@ -35,7 +34,7 @@ public class GameService {
 
     public String promptAI() {
         ArrayList<String> bossSkills = new ArrayList<>();
-        ArrayList<Ability>  testing = Character.abilities;
+        ArrayList<Ability>  testing = (ArrayList<Ability>) Character.abilities;
         testing.forEach(ability -> {
             bossSkills.add(ability.getName());
         });
@@ -68,7 +67,6 @@ public class GameService {
     }
 
     public void creatGameState(String userId, Hero hero, String userName){
-//        this.hero = hero;
         this.boss = creatBoss(hero);
         this.gameStates.put(userId, new GameState(hero, this.boss, userName));
     }
@@ -99,7 +97,7 @@ public class GameService {
         boss = game.getBoss();
         hero.decreaseMana(ability.getManaCost());
 
-        if (ability.getEffect().equalsIgnoreCase("cleans")){
+        if (ability.getEffect().contains("cleans")){
             hero.increaseHealth(-ability.getPower());
         }else {
             boss.decreaseHealth(ability.getPower());
@@ -135,15 +133,15 @@ public class GameService {
             } else if (damagePercent > (100.0 / 7) && player.getLevel() == 0) { // >14% damage
                 System.out.println("testing level 1");
                 int increase = enemy.getDamageTaken() / 4;
-                System.out.println("increase is: " + increase);
+//                System.out.println("increase is: " + increase);
                 player.increaseHealth(increase);
                 player.increaseMaxHealth(increase);
                 player.increaseMagicPower(increase / 2);
                 player.increaseMaxMana(increase);
                 player.increaseLevel(1, increase);
             } else {
-                System.out.println(enemy.getDamageTaken());
-                System.out.println("No upgrade coz + " + damagePercent);
+//                System.out.println(enemy.getDamageTaken());
+//                System.out.println("No upgrade coz + " + damagePercent);
             }
 
         } catch (ArithmeticException e) {

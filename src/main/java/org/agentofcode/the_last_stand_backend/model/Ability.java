@@ -3,156 +3,80 @@ package org.agentofcode.the_last_stand_backend.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 @Component
 public class Ability {
-
-
     private String name;
     private String element;
-    private String effect;
-
     private int power;
     private int manaCost;
     private int coolDown;
     private int slot;
-
+    private String type;
+    private List<String> effects;
+    private List<String> synergyElements;
 
     public Ability(){}
 
-    public Ability(String name, int power, String element, String effect, int manaCost, int coolDown, int slot) {
+    public Ability(String name, int power, String element, String type, int manaCost, int coolDown, int slot,
+                   List<String> effects, List<String> synergyElements) {
+
         this.name = name;
         this.power = power;
         this.element = element;
+        this.type = type;
         this.manaCost = manaCost;
         this.coolDown = coolDown;
         this.slot = slot;
-        this.effect = effect;
+        this.effects = effects;
+        this.synergyElements = synergyElements;
     }
 
+    // Getters
     public String getName() {return name;}
     public String getElement() {return element;}
-    public String getEffect() {return effect;}
+    public List<String> getEffect() {return effects;}
     public int getSlot() {return slot;}
     public int getPower() {return power;}
     public int getManaCost() {return manaCost;}
     public int getCoolDown() {return coolDown;}
 
+    public String getType() {return type;}
+    public List<String> getEffects() {return effects;}
+    public List<String> getSynergyElements() {return synergyElements;}
+
     @JsonIgnore
     public Ability getCounterElement() {
-        String air = "air", fire = "fire", ice = "ice", water = "water", magma =  "magma", light = "light";
-        //Abilities from combinations
-        String mud = "mud", lighting = "lighting", earth= "earth", metal = "metal", plasma = "plasma", shadow = "shadow";
-        String gravity = "gravity";
-        Ability ability =  Character.abiltityMap.get("Stone Fist");
 
-        switch (this.element) {
-            case "air" -> {
-                int random = new Random().nextInt(3);
+        Map<String, List<String>> counters = new HashMap<>();
 
-                List airCounters = new ArrayList<>(List.of( // earth, ice
-                        Character.abiltityMap.get("Stone Fist"),
-                        Character.abiltityMap.get("Earthquake"),
-                        Character.abiltityMap.get("Iron Skin"),
-                        Character.abiltityMap.get("Root Snare")
-                ));
-                ability = (Ability) airCounters.get(random);
-            }
-            case "fire" -> {
-                int random = new Random().nextInt(3);
+        counters.put("air", List.of("Stone Fist", "Earthquake", "Root Snare"));
+        counters.put("fire", List.of("Aqua Blade", "Tidal Crash"));
+        counters.put("earth", List.of("Aqua Blade", "Hurricane Spiral"));
+        counters.put("ice", List.of("Flame Burst", "Inferno Wave"));
+        counters.put("water", List.of("Shock Bolt", "Chain Lightning"));
+        counters.put("lightning", List.of("Stone Fist", "Iron Skin"));
+        counters.put("shadow", List.of("Radiant Beam", "Purify"));
+        counters.put("light", List.of("Umbral Nova", "Night Slash"));
 
-                List fireCounters = new ArrayList<>(List.of( // wate, ice
-                        Character.abiltityMap.get("Flame Burst"),
-                        Character.abiltityMap.get("Inferno Wave"),
-                        Character.abiltityMap.get("Scorch Mark"),
-                        Character.abiltityMap.get("Phoenix Rebirth")
-                ));
-                ability = (Ability) fireCounters.get(random);
-            }
-            case "earth" -> {
-                int random = new Random().nextInt(3);
+        // combo elements
+        counters.put("magma", List.of("Aqua Blade"));
+        counters.put("mud", List.of("Gale Slash"));
+        counters.put("metal", List.of("Earthquake"));
+        counters.put("plasma", List.of("Stone Fist"));
 
-                List earthCounters = new ArrayList<>(List.of( // water, air
-                        Character.abiltityMap.get("Stone Fist"),
-                        Character.abiltityMap.get("Earthquake"),
-                        Character.abiltityMap.get("Iron Skin"),
-                        Character.abiltityMap.get("Root Snare")
-                ));
-                ability = (Ability) earthCounters.get(random);
-            }
-            case "ice" -> {
-                int random = new Random().nextInt(1);
+        List<String> possibleCounters = counters.getOrDefault(this.element.toLowerCase(),
+                List.of("Stone Fist"));
 
-                List iceCounters = new ArrayList<>(List.of( // earth, ice
-                        Character.abiltityMap.get("Flame Burst"),
-                        Character.abiltityMap.get("Inferno Wave"),
-                        Character.abiltityMap.get("Scorch Mark"),
-                        Character.abiltityMap.get("Phoenix Rebirth")
-                ));
-                ability = (Ability) iceCounters.get(random);
-            }
-            case "water" -> { // fire
-                int random = new Random().nextInt(1);
+        int random = new Random().nextInt(possibleCounters.size());
+        return Character.abiltityMap.get(possibleCounters.get(random));
+    }
 
-                List waterCounters = new ArrayList<>(List.of(
-                        Character.abiltityMap.get("Aqua Blade"),
-                        Character.abiltityMap.get("Tidal Crash")
-                ));
-                ability = (Ability) waterCounters.get(random);
-            }
-            case "magma" -> {
-                int random = new Random().nextInt(1);
-
-                List waterCounters = new ArrayList<>(List.of(
-                        Character.abiltityMap.get("Aqua Blade"),
-                        Character.abiltityMap.get("Tidal Crash")
-                ));
-                ability = (Ability) waterCounters.get(random);
-            }
-            case "mud" -> {
-                int random = new Random().nextInt(1);
-
-                List waterCounters = new ArrayList<>(List.of(
-                        Character.abiltityMap.get("Aqua Blade"), 
-                        Character.abiltityMap.get("Tidal Crash")
-                ));
-                ability = (Ability) waterCounters.get(random);
-            }
-            case "metal" -> {
-                int random = new Random().nextInt(1);
-
-                List waterCounters = new ArrayList<>(List.of(
-                        Character.abiltityMap.get("Aqua Blade"),
-                        Character.abiltityMap.get("Tidal Crash")
-                ));
-                ability = (Ability) waterCounters.get(random);
-            }
-            case "shadow" -> {
-                int random = new Random().nextInt(1);
-
-                List waterCounters = new ArrayList<>(List.of(
-                        Character.abiltityMap.get("Aqua Blade"),
-                        Character.abiltityMap.get("Tidal Crash")
-                ));
-                ability = (Ability) waterCounters.get(random);
-            }
-            case "lighting", "plasma" -> {
-                int random = new Random().nextInt(3);
-
-                List lightingCounter = new ArrayList<>(List.of(
-                        Character.abiltityMap.get("Shock Bolt"),
-                        Character.abiltityMap.get("Storm Spear"),
-                        Character.abiltityMap.get("Chain Lightning"),
-                        Character.abiltityMap.get("Static Charge")
-                ));
-                ability = (Ability) lightingCounter.get(random);
-            }
-        }
-
-        return ability;
+    @JsonIgnore
+    public boolean canTriggerSynergy(List<String> playerElements) {
+        if (synergyElements == null || synergyElements.isEmpty()) return true;
+        return playerElements.containsAll(synergyElements);
     }
 }
 
